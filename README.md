@@ -2,15 +2,13 @@
 
 ## Introduction
 
-PoetryDB is an API for internet poets.
+PoetryDB is an API for internet poets. <i>But what is an API? </i>
 
-What is an API? 
+An API ensures that a program (such as a browser) always returns data in an expected format. <i>JSON</i> is one of the most popular formats in use today.
 
-IT folk call it an Application Programming Interface. Think of it as a way for computers to receive data from other programs in a structure they expect.
+"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data wind. Internet technology is making words endlessly manipulable, and traditional poets and writers are getting left behind. I want to change this, by giving us all a leg up to the future.
 
-"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data wind. Words are material, and internet technology has made their endless manipulation possible.
-
-How does it work?
+<i>How does it work?</i>
 
 You send a URL like [so](http://poetrydb.org/title/Ozymandias/lines.json):
 
