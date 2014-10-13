@@ -79,7 +79,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 
 ## API Reference
 
-General format of API:
+<b>General format of API:</b>
 
 ```
 /<field>/<field data>[:<match type>][/<output field>[,<output field>][..][.<format>]]
@@ -134,10 +134,12 @@ or:
 
 ### Author
 
+<b>General Format:</b>
 ```
 /author/<author>[:abs][/<output field>,<output field>,..[.<format>]]
 ```
 
+Format:
 ```
 /author/<author>
 ```
@@ -177,6 +179,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /author/<author>/author
 ```
@@ -193,6 +196,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /author/<author>:abs/author
 ```
@@ -209,6 +213,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /author/<author>/<output field>,<output field>,<output field>
 ```
@@ -227,6 +232,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /author/<author>/<output field>,<output field>,<output field>.<format>
 ```
@@ -246,10 +252,12 @@ linecount
 
 ### Title
 
+<b>General Format:</b>
 ```
 /title/<title>[:abs][/<output field>,<output field>,..[.<format>]]
 ```
 
+Format:
 ```
 /title/<title>
 ```
@@ -284,6 +292,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /title/<title>/title
 ```
@@ -312,6 +321,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /title/<title>:abs/title
 ```
@@ -328,6 +338,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /title/<title>/<output field>,<output field>,<output field>
 ```
@@ -346,6 +357,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /title/<title>/<output field>,<output field>,<output field>.<format>
 ```
@@ -376,10 +388,12 @@ The lone and level sands stretch far away".
 
 ### Lines
 
+<b>General Format:</b>
 ```
 /lines/<lines>[:abs][/<output field>,<output field>,..[.<format>]]
 ```
 
+Format:
 ```
 /lines/<lines>
 ```
@@ -423,6 +437,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /lines/<lines>/<output field>
 ```
@@ -439,6 +454,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /lines/<lines>/<output field>,<output field>,<output field>
 ```
@@ -457,6 +473,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /lines/<lines>/<output field>,<output field>,<output field>.<format>
 ```
@@ -476,12 +493,14 @@ linecount
 
 ### Linecount
 
+<b>General Format:</b>
 ```
 /linecount/<linecount>[/<output field>,<output field>,..[.<format>]]
 ```
 
 Note: linecount is always exact, and therefore the match type ```:abs``` is not applicable.
 
+Format:
 ```
 /linecount/<linecount>
 ```
@@ -525,6 +544,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /linecount/<linecount>/<output field>
 ```
@@ -547,6 +567,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /linecount/<linecount>/<output field>,<output field>,<output field>
 ```
@@ -570,6 +591,7 @@ Result:
 ]
 ```
 
+Format:
 ```
 /linecount/<linecount>/<output field>,<output field>.<format>
 ```
