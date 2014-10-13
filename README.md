@@ -4,7 +4,15 @@
 
 PoetryDB is an API for internet poets.
 
-You send a URL like [so](http://poetrydb.org/title/Ozymandias/lines.text):
+What is an API? 
+
+IT folk call it an Application Programming Interface. Think of it as a way for computers to receive data from other programs in a structure they expect.
+
+"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data wind. Words are material, and internet technology has made their endless manipulation possible.
+
+How does it work?
+
+You send a URL like [so](http://poetrydb.org/title/Ozymandias/lines.json):
 
 ```
 http://poetrydb.org/title/Ozymandias/lines.json
@@ -35,7 +43,7 @@ And hey, presto! out comes the lines of Shelley's famous sonnet:
 ]
 ```
 
-But what do we do with text in json format (or yaml, or xml)? The real power of PoetryDB's API becomes apparent when combined with a program. Consider the following Ruby code:
+But what do we do with text in json format? The real power of PoetryDB's API becomes apparent when combined with a program. Consider the following Ruby code:
 
 ```
 require 'httparty'
@@ -69,7 +77,7 @@ Those are my best days, when I shake with feare.
 
 The API is written in Ruby and uses Sinatra to resolve API routes. The poetry data is stored in a MongoDB database. The Ruby code is provided here as Open Source. The PoetryDB database is not directly accessible, in order to preserve its integrity.
 
-[[Architecture_Diagram.png]]
+![Architecture Diagram](http://github.com/thundercomb/poetrydb/Architecture_Diagram.png)
 
 ## API Reference
 
@@ -79,52 +87,52 @@ General format of API:
 /<field>/<field data>[:<match type>][/<output field>[,<output field>][..][.<format>]]
 ```
 
-* <field> can be one of:
+* ```<field>``` can be one of:
 
-** ```author```: The name, or part of the name, of the author of a poem
-** ```title```: The title, or part of the title, of a poem
-** ```lines```: Part of a line or lines of a poem
-** ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)
+  ```author```: The name, or part of the name, of the author of a poem
+  ```title```: The title, or part of the title, of a poem
+  ```lines```: Part of a line or lines of a poem
+  ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)
 
-* <field data> relates to <field>. When <field> is:
+* ```<field data>``` relates to ```<field>```. When ```<field>``` is:
 
-** ```author```: <field data> is the name, or part of the name, of the author of a poem
-** ```title```: <field data> is the title, or part of the title, of a poem
-** ```lines```: <field data> is part of a line or lines of a poem
-** ```linecount```: <field data> is the number of lines of a poem
-             *** Number of lines includes section headings
-             *** Number of lines excludes empty lines (eg. section breaks)
+  ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem
+  ```title```: ```<field data>``` is the title, or part of the title, of a poem
+  ```lines```: ```<field data>``` is part of a line or lines of a poem
+  ```linecount```: ```<field data>``` is the number of lines of a poem
+                   Number of lines includes section headings
+                   Number of lines excludes empty lines (eg. section breaks)
 
-* [:<match type>] is optional. It can be:
+* ```[:<match type>]``` is optional. It can be:
 
-** ```:abs```: Match <field data> exactly when searching <field>
-
-or:
-
-** Default (empty): match <field data> with any part of <field> when searching
-
-* [/<output field>[,<output field>][..] are optional. They are a comma delimited set that can be any combination of:
-
-** Default (empty): Return all data of each of the matching poems
-** ```author```: Return only the author of each of the matching poems 
-** ```title```: Return only the title of each of the matching poems
-** ```lines```: Return only the lines of each of the matching poems
-** ```linecount```: Return only the number of lines of each of the matching poems
-** ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems
+  ```:abs```: Match ```<field data>``` exactly when searching ```<field>```
 
 or:
 
-** Default (empty): Return all data of each of the matching poems
-** ```all```: Return all data of the matching poems
+  Default (empty): match ```<field data>``` with any part of ```<field>``` when searching
+
+* ```[/<output field>[,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:
+
+  Default (empty): Return all data of each of the matching poems
+  ```author```: Return only the author of each of the matching poems 
+  ```title```: Return only the title of each of the matching poems
+  ```lines```: Return only the lines of each of the matching poems
+  ```linecount```: Return only the number of lines of each of the matching poems
+  ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems
+
+or:
+
+  Default (empty): Return all data of each of the matching poems
+  ```all```: Return all data of the matching poems
 
 * [.<format>] is optional. It can be:
 
-** ```.json```: Return data in json format
-** ```.text```: Return data in text format
+  ```.json```: Return data in json format
+  ```.text```: Return data in text format
 
 or:
 
-** Default (empty): Return data in json format
+  Default (empty): Return data in json format
 
 ### Author
 
@@ -138,6 +146,8 @@ or:
 Example:
 ```
 /author/Ernest Dowson
+```
+Result:
 ```
 [
   {
@@ -248,6 +258,8 @@ linecount
 Example:
 ```
 /title/Ozymandias
+```
+Result:
 ```
 [
   {
@@ -377,6 +389,8 @@ Example:
 ```
 /lines/Latitudeless Place
 ```
+Result:
+```
 [
   {
     "title": "Now I knew I lost her --",
@@ -461,6 +475,7 @@ Emily Dickinson
 linecount
 20
 ```
+
 ### Linecount
 
 ```
@@ -475,6 +490,8 @@ Note: linecount is always exact, and therefore the match type ```:abs``` is not 
 Example:
 ```
 /linecount/3
+```
+Result:
 ```
 [
   {
@@ -592,4 +609,4 @@ William Topaz McGonagall
 
 ## Contact
 
-Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @poetrydb 
+Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @po3db 
