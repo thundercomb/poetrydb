@@ -1,0 +1,9 @@
+* make multiple inputs possible, eg. /linecount,author/14,Shakespeare/lines
+* make ranges possible, eg. /linecount/14-20/lines
+* add number of sections in poem
+* add date when poem was written / published
+* add tags for poem categories, eg. romantic, metaphysical, modernist
+* in the case of /author/Shakespeare/author decide whether to provide "William Shakespeare" n times or only once (n times seems superfluous)
+* make it possible to get lists of various fields: list of all authors, list of all poems, etc.
+
+DONE * add ability to specify absolute data
