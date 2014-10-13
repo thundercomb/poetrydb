@@ -6,7 +6,7 @@ PoetryDB is an API for internet poets. <i>But what is an API? </i>
 
 An API ensures that a program (such as a browser) always returns data in an expected format. <i>JSON</i> is one of the most popular formats in use today.
 
-"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data wind. Internet technology is making words endlessly manipulable, and traditional poets and writers are getting left behind. I want to change this, by giving us all a leg up to the future.
+"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data winds. Internet technology is making words endlessly manipulable, and traditional poets and writers are getting left behind. I want to change this, by giving us all a leg up into a more empowered future.
 
 <i>How does it work?</i>
 
@@ -50,7 +50,7 @@ response = HTTParty.get("http://poetrydb.org/linecount/14/lines").to_a
 (0..13).each { |i| puts response[rand(256)]['lines'][i] }
 ```
 
-This fairly simple code is capable of surprising poetry! The program asks PoetryDB for all poems that are 14 lines in length, then writes out a new sonnet based on the results. Astute readers will know that this is the first step towards creating your own version of Raymond Quesneau's [One Hundred Thousand Billion Sonnets] (http://www.growndodo.com/wordplay/oulipo/10%5E14sonnets.html), this time based on some of the most beautiful lines ever written in the English language.
+This fairly simple code is capable of surprising poetry! The program asks PoetryDB for all poems that are 14 lines in length, then writes out a new sonnet based on the results. Astute readers will know that this is the first step towards creating your own version of Raymond Queneau's [One Hundred Thousand Billion Sonnets] (http://www.growndodo.com/wordplay/oulipo/10%5E14sonnets.html), this time based on some of the most beautiful lines ever written in the English language.
 
 Here is an example:
 
