@@ -75,7 +75,7 @@ Those are my best days, when I shake with feare.
 
 The API is written in Ruby and uses Sinatra to resolve API routes. The poetry data is stored in a MongoDB database. The Ruby code is provided here as Open Source. The PoetryDB database is not directly accessible, in order to preserve its integrity.
 
-![Architecture Diagram](http://github.com/thundercomb/poetrydb/Architecture_Diagram.png)
+![Architecture Diagram](https://github.com/thundercomb/poetrydb/blob/master/Architecture_Diagram.jpg)
 
 ## API Reference
 
