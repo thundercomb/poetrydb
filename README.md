@@ -123,7 +123,7 @@ or:
   Default (empty): Return all data of each of the matching poems
   ```all```: Return all data of the matching poems
 
-* [.<format>] is optional. It can be:
+* ```[.<format>]``` is optional. It can be:
 
   ```.json```: Return data in json format
   ```.text```: Return data in text format
