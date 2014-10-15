@@ -2,6 +2,13 @@ require 'sinatra'
 
 class Web < Sinatra::Base
 
+  get '/author?s?' do
+    content_type :json
+    
+    @data = find_list('author')
+    respond @data
+  end
+
   get '/author/:author/all.?:format?' do
     content_type :json
     format = params[:format]
