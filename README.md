@@ -136,7 +136,33 @@ or:
 
 <b>General Format:</b>
 ```
-/author/<author>[:abs][/<output field>,<output field>,..[.<format>]]
+/author[/<author>[:abs][/<output field>,<output field>,..[.<format>]]]
+```
+
+Format:
+```
+/author
+```
+Example:
+```
+/author
+```
+Result:
+```
+{
+  "authors": [
+    "Adam Lindsay Gordon",
+    "Alan Seeger",
+    "Alexander Pope",
+    "Algernon Charles Swinburne",
+    .
+    .
+    "William Shakespeare",
+    "William Topaz McGonagall",
+    "William Vaughn Moody",
+    "William Wordsworth"
+  ]
+}
 ```
 
 Format:
@@ -254,7 +280,33 @@ linecount
 
 <b>General Format:</b>
 ```
-/title/<title>[:abs][/<output field>,<output field>,..[.<format>]]
+/title[/<title>[:abs][/<output field>,<output field>,..[.<format>]]]
+```
+
+Format:
+```
+/title
+```
+Example:
+```
+/title
+```
+Result:
+```
+{
+  "titles": [
+    "A Baby's Death",
+    "A Ballad Of The Trees And The Master",
+    "A Ballad of Burdens",
+    "A Ballad of Death",
+    .
+    .
+    "You know that Portrait in the Moon --",
+    "You see I cannot see -- your lifetime",
+    "Young Munro the Sailor",
+    "Youth And Age"
+  ]
+}
 ```
 
 Format:
