@@ -82,7 +82,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 <b>General format of API:</b>
 
 ```
-/<input field>/<search term>[;<search term>][..][:<search type>][/<output field>[,<output field>][..][.<format>]
+/<input field>/<search term>[;<search term>][..][:<search type>][/<output field>][,<output field>][..][.<format>]
 ```
 
 * ```<input field>``` can be one of:
@@ -685,7 +685,7 @@ William Topaz McGonagall
 
 <b>General Format:</b>
 ```
-/<input field>,<input field>[,<input field>[..]/<search term>;<search term>[;<search term][..][:abs][/<output field>][,<output field>][..][.<format>]
+/<input field>,<input field>[,<input field>][..]/<search term>;<search term>[;<search term][..][:abs][/<output field>][,<output field>][..][.<format>]
 ```
 
 Notes: 
