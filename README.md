@@ -840,3 +840,7 @@ Winter
 ## Contact
 
 Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @po3db 
+
+## License
+
+To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](http://github.com/thundercomb/poetrydb/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
