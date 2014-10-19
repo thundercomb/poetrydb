@@ -25,7 +25,7 @@ class Web < Sinatra::Base
     rescue Exception => e
       if e.message == '405'
         return json_status(
-          '405', "Comma delimited fields must have corresponding pipe delimited search terms, eg. /title,author/Winter|Shakespeare/all"
+          '405', "Comma delimited fields must have corresponding semicolon delimited search terms, eg. /title,author/Winter;Shakespeare/all"
         )
       end
     end
@@ -44,7 +44,7 @@ class Web < Sinatra::Base
     rescue Exception => e
       if e.message == '405'
         return json_status(
-          '405', "Comma delimited fields must have corresponding pipe delimited search terms, eg. /title,author/Winter|Shakespeare/lines"
+          '405', "Comma delimited fields must have corresponding semicolon delimited search terms, eg. /title,author/Winter;Shakespeare/lines"
         )
       end
     end
@@ -68,7 +68,7 @@ class Web < Sinatra::Base
     rescue Exception => e
       if e.message == '405'
         return json_status(
-          '405', 'Comma delimited fields must have corresponding pipe delimited search terms, eg. /title,author/Winter|Shakespeare'
+          '405', 'Comma delimited fields must have corresponding semicolon delimited search terms, eg. /title,author/Winter;Shakespeare'
         )
       end
     end
