@@ -46,8 +46,8 @@ But what do we do with text in json format? The real power of PoetryDB's API bec
 ```
 require 'httparty'
 
-response = HTTParty.get("http://poetrydb.org/linecount/14/lines").to_a
-(0..13).each { |i| puts response[rand(256)]['lines'][i] }
+response = HTTParty.get("http://poetrydb.org/author,linecount/Shakespeare;14/lines").to_a
+(0..13).each { |i| puts response[rand(154)]['lines'][i] }
 ```
 
 This fairly simple code is capable of surprising poetry! The program asks PoetryDB for all poems that are 14 lines in length, then writes out a new sonnet based on the results. Astute readers will know that this is the first step towards creating your own version of Raymond Queneau's [One Hundred Thousand Billion Sonnets] (http://www.growndodo.com/wordplay/oulipo/10%5E14sonnets.html), this time based on some of the most beautiful lines ever written in the English language.
@@ -55,20 +55,20 @@ This fairly simple code is capable of surprising poetry! The program asks Poetry
 Here is an example:
 
 ```
-`Now Art has lost its mental charms
-Give me now libidinous joys only!
-Like a fair lady at her casement, shines
-Unlooked for joy in that I honour most.
-Transported from my self into your being;
-But, Blossom, were I,
-What they last thought of when the brain grew sick
-  Sits meek Content with light, unanxious heart;
-I build my hopes a world above the sky,
-Permitted desolations, comfort mine !
-He knows the joy. Fools laugh because he reels
-That it nor grows with heat, nor drowns with showers.
-Beauties of deeper glance, and hear their singing,
-Those are my best days, when I shake with feare.
+Since I left you, mine eye is in my mind;
+Full character'd with lasting memory,
+The rose looks fair, but fairer we it deem
+For that sweet odour, which doth in it live.
+Yet, in good faith, some say that thee behold,
+Thy face hath not the power to make love groan;
+But the defendant doth that plea deny,
+By seeing farther than the eye hath shown.
+Thou art the grave where buried love doth live,
+It is my love that keeps mine eye awake:
+Are windows to my breast, where-through the sun
+Unless thou take that honour from thy name:
+  Therefore I lie with her, and she with me,
+  Compar'd with loss of thee, will not seem so.
 ```
 
 ## Architecture and code
@@ -82,17 +82,17 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 <b>General format of API:</b>
 
 ```
-/<field>/<field data>[:<match type>][/<output field>[,<output field>][..][.<format>]]
+/<input field>/<search term>[;<search term>][..][:<search type>][/<output field>[,<output field>][..][.<format>]
 ```
 
-* ```<field>``` can be one of:
+* ```<input field>``` can be one of:
 
   ```author```: The name, or part of the name, of the author of a poem
   ```title```: The title, or part of the title, of a poem
   ```lines```: Part of a line or lines of a poem
   ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)
 
-* ```<field data>``` relates to ```<field>```. When ```<field>``` is:
+* ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
 
   ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem
   ```title```: ```<field data>``` is the title, or part of the title, of a poem
@@ -101,15 +101,15 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
                    Number of lines includes section headings
                    Number of lines excludes empty lines (eg. section breaks)
 
-* ```[:<match type>]``` is optional. It can be:
+* ```[:<search type>]``` is optional. It can be:
 
-  ```:abs```: Match ```<field data>``` exactly when searching ```<field>```
+  ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```
 
 or:
 
-  Default (empty): match ```<field data>``` with any part of ```<field>``` when searching
+  Default (empty): match ```<search term>``` with any part of ```<input field>``` when searching
 
-* ```[/<output field>[,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:
+* ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:
 
   Default (empty): Return all data of each of the matching poems
   ```author```: Return only the author of each of the matching poems 
@@ -132,11 +132,13 @@ or:
 
   Default (empty): Return data in json format
 
+* ```[..]``` means that by using the same syntax, more instances of the preceding type can be expressed
+
 ### Author
 
 <b>General Format:</b>
 ```
-/author[/<author>[:abs][/<output field>,<output field>,..[.<format>]]]
+/author[/<author>][:abs][/<output field>][,<output field>][..][.<format>]
 ```
 
 Format:
@@ -280,7 +282,7 @@ linecount
 
 <b>General Format:</b>
 ```
-/title[/<title>[:abs][/<output field>,<output field>,..[.<format>]]]
+/title[/<title>][:abs][/<output field>][,<output field>][..][.<format>]
 ```
 
 Format:
@@ -442,7 +444,7 @@ The lone and level sands stretch far away".
 
 <b>General Format:</b>
 ```
-/lines/<lines>[:abs][/<output field>,<output field>,..[.<format>]]
+/lines/<lines>[:abs][/<output field>][,<output field>][..][.<format>]
 ```
 
 Format:
@@ -547,7 +549,7 @@ linecount
 
 <b>General Format:</b>
 ```
-/linecount/<linecount>[/<output field>,<output field>,..[.<format>]]
+/linecount/<linecount>[/<output field>][,<output field>][..][.<format>]
 ```
 
 Note: linecount is always exact, and therefore the match type ```:abs``` is not applicable.
@@ -677,6 +679,162 @@ title
 Edinburgh
 author
 William Topaz McGonagall
+```
+
+### Combinations
+
+<b>General Format:</b>
+```
+/<input field>,<input field>[,<input field>[..]/<search term>;<search term>[;<search term][..][:abs][/<output field>][,<output field>][..][.<format>]
+```
+
+Notes: 
+1. The number of input fields should always be matched by the number of search terms
+2. The search terms are separated by the semicolon to allow commas to be used in search terms. However, semicolons are a feature of many texts, and unfortunately cannot be part of the search term currently.
+
+Format:
+```
+/<input field>,<input field>,<input field>/<search term>;<search term>;<search term>
+```
+Example:
+```
+/title,author,linecount/Winter;Shakespeare;18
+```
+Result:
+```
+[
+  {
+    "title": "Spring and Winter ii",
+    "author": "William Shakespeare",
+    "lines": [
+      "WHEN icicles hang by the wall,",
+      "   And Dick the shepherd blows his nail,",
+      "And Tom bears logs into the hall,",
+      "   And milk comes frozen home in pail,",
+.
+.
+.
+    ],
+    "linecount": 18
+  },
+  {
+    "title": "Spring and Winter i",
+    "author": "William Shakespeare",
+    "lines": [
+      "WHEN daisies pied and violets blue,",
+      "   And lady-smocks all silver-white,",
+      "And cuckoo-buds of yellow hue",
+      "   Do paint the meadows with delight,",
+.
+.
+.
+    ],
+    "linecount": 18
+  },
+  {
+    "title": "Winter",
+    "author": "William Shakespeare",
+    "lines": [
+      "When icicles hang by the wall",
+      "And Dick the shepherd blows his nail",
+      "And Tom bears logs into the hall,",
+      "And milk comes frozen home in pail,",
+.
+.
+.
+    ],
+    "linecount": 18
+  }
+]
+```
+
+Format:
+```
+/<input field>,<input field>,<input field>/<search term>;<search term>;<search term>:abs
+```
+Note: The search type ```:abs``` applies to <b>all</b> the search terms, not just the preceding search term.
+
+Example:
+```
+/title,author,linecount/Winter;William Shakespeare;18:abs
+```
+Result:
+```
+[
+  {
+    "title": "Winter",
+    "author": "William Shakespeare",
+    "lines": [
+      "When icicles hang by the wall",
+      "And Dick the shepherd blows his nail",
+      "And Tom bears logs into the hall,",
+      "And milk comes frozen home in pail,",
+      "When Blood is nipped and ways be foul,",
+      "Then nightly sings the staring owl,",
+      "Tu-who;",
+      "Tu-whit, tu-who: a merry note,",
+      "While greasy Joan doth keel the pot.",
+      "",
+      "When all aloud the wind doth blow,",
+      "And coughing drowns the parson's saw,",
+      "And birds sit brooding in the snow,",
+      "And Marian's nose looks red and raw",
+      "When roasted crabs hiss in the bowl,",
+      "Then nightly sings the staring owl,",
+      "Tu-who;",
+      "Tu-whit, tu-who: a merry note,",
+      "While greasy Joan doth keel the pot."
+    ],
+    "linecount": 18
+  }
+]
+```
+Format:
+```
+/<input field>,<input field>/<search term>;<search term>/<output field>
+```
+Example:
+```
+/title,author/Winter;William Shakespeare/title
+```
+Result:
+```
+[
+  {
+    "title": "Spring and Winter ii"
+  },
+  {
+    "title": "Spring and Winter i"
+  },
+  {
+    "title": "Blow, Blow, Thou Winter Wind"
+  },
+  {
+    "title": "Winter"
+  }
+]
+```
+Format:
+```
+/<input field>,<input field>/<search term>;<search term>/<output field>[.<format>]
+```
+Example:
+```
+/title,author/Winter;William Shakespeare/title.text
+```
+Result:
+```
+title
+Spring and Winter ii
+
+title
+Spring and Winter i
+
+title
+Blow, Blow, Thou Winter Wind
+
+title
+Winter
 ```
 
 ## Contact

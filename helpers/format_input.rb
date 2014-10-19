@@ -10,7 +10,7 @@ class Web < Sinatra::Base
       abs = false
     end
 
-    search_hash = Hash[search_keys.split(',').zip(search_terms.split('|'))]
+    search_hash = Hash[search_keys.split(',').zip(search_terms.split(';'))]
     search_hash.keys.each do |key|
       if search_hash["#{key}"] == nil
         raise "405"
