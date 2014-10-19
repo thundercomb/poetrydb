@@ -14,8 +14,6 @@ class Web < Sinatra::Base
     search_hash.keys.each do |key|
       if search_hash["#{key}"] == nil
         raise "405"
-      elsif key == "linecount"
-        search_hash["linecount"] = search_hash["linecount"].to_i
       elsif !abs
         search_hash["#{key}"] = /#{search_hash[key]}/
       end

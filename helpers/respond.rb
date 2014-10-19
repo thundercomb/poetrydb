@@ -4,7 +4,6 @@ class Web < Sinatra::Base
 
   def respond(data, format='json')
     if @data.length > 0
-      #@data.each { |poem| poem.delete('_id') }
       if format.nil?
         response_format @data, request.accept
       else
