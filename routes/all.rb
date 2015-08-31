@@ -20,6 +20,12 @@ class Web < Sinatra::Base
     content_type :json
 
     output_format = params[:format]
+    unless output_format == nil or ['text', 'json'].include? output_format
+      return json_status(
+        405,"#{output_format} output format not available. Only text and json allowed."
+      )
+    end
+
     begin
       search_hash = format_input(params[:keys],params[:search])
     rescue Exception => e
@@ -39,6 +45,11 @@ class Web < Sinatra::Base
 
     # Split on '.' for possible format suffix
     output_format = params[:fields].split('.')[1]
+    unless output_format == nil or ['text', 'json'].include? output_format
+      return json_status(
+        405,"#{output_format} output format not available. Only text and json allowed."
+      )
+    end
     begin
       search_hash = format_input(params[:keys],params[:search])
     rescue Exception => e
@@ -53,9 +64,14 @@ class Web < Sinatra::Base
     # Unset _id field and enable the others
     output_fields['_id'] = 0
     params[:fields].split('.')[0].split(',').each do |field|
+      unless ['author', 'title', 'lines', 'linecount'].include? field
+        return json_status(
+          405,"#{field} output field not available. Only author, title, lines, and linecount allowed."
+        )
+      end
       output_fields["#{field}"] = 1
     end
-
+      
     @data = new_find_data(search_hash, output_fields)
     respond @data, output_format
   end 
