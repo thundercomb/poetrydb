@@ -115,7 +115,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   
   or:  
   
-  ```all```: Return all data of the matching poems (same as Default (empty))  
+  ```all```: Return all data of the matching poems (same as ```Default (empty)```)  
   
 * ```[.<format>]``` is optional. It can be:  
   
