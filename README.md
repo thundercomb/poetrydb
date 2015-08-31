@@ -87,52 +87,43 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 
 * ```<input field>``` can be one of:
 
-  ```author```: The name, or part of the name, of the author of a poem
-  ```title```: The title, or part of the title, of a poem
-  ```lines```: Part of a line or lines of a poem
-  ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)
+  ```author```: The name, or part of the name, of the author of a poem  
+  ```title```: The title, or part of the title, of a poem  
+  ```lines```: Part of a line or lines of a poem  
+  ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)  
 
 * ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
 
-  ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem
-  ```title```: ```<field data>``` is the title, or part of the title, of a poem
-  ```lines```: ```<field data>``` is part of a line or lines of a poem
-  ```linecount```: ```<field data>``` is the number of lines of a poem
-                   Number of lines includes section headings
-                   Number of lines excludes empty lines (eg. section breaks)
+  ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem  
+  ```title```: ```<field data>``` is the title, or part of the title, of a poem  
+  ```lines```: ```<field data>``` is part of a line or lines of a poem  
+  ```linecount```: ```<field data>``` is the number of lines of a poem (use with ```:abs``` to avoid fuzzy search, eg. "14" also implies "114"). Number of lines includes section headings, but excludes empty lines (eg. section breaks)
 
 * ```[:<search type>]``` is optional. It can be:
 
-  ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```
+  ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```  
+  ```Default (empty)```: match ```<search term>``` with any part of ```<input field>``` when searching  
+  
+* ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:  
+  
+  ```author```: Return only the author of each of the matching poems  
+  ```title```: Return only the title of each of the matching poems  
+  ```lines```: Return only the lines of each of the matching poems  
+  ```linecount```: Return only the number of lines of each of the matching poems  
+  ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems  
+  ```Default (empty)```: Return all data of each of the matching poems  
+  
+  or:  
+  
+  ```all```: Return all data of the matching poems (same as Default (empty))  
+  
+* ```[.<format>]``` is optional. It can be:  
+  
+  ```.json```: Return data in json format  
+  ```.text```: Return data in text format  
+  ```Default (empty)```: Return data in json format  
 
-or:
-
-  Default (empty): match ```<search term>``` with any part of ```<input field>``` when searching
-
-* ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:
-
-  Default (empty): Return all data of each of the matching poems
-  ```author```: Return only the author of each of the matching poems 
-  ```title```: Return only the title of each of the matching poems
-  ```lines```: Return only the lines of each of the matching poems
-  ```linecount```: Return only the number of lines of each of the matching poems
-  ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems
-
-or:
-
-  Default (empty): Return all data of each of the matching poems
-  ```all```: Return all data of the matching poems
-
-* ```[.<format>]``` is optional. It can be:
-
-  ```.json```: Return data in json format
-  ```.text```: Return data in text format
-
-or:
-
-  Default (empty): Return data in json format
-
-* ```[..]``` means that by using the same syntax, more instances of the preceding type can be expressed
+* ```[..]``` means that by using the same syntax, more instances of the preceding type can be expressed  
 
 ### Author
 
