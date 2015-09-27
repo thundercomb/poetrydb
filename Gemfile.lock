@@ -1,13 +1,13 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bson (1.11.1)
-    bson_ext (1.11.1)
-      bson (~> 1.11.1)
+    bson (~> 1.12)
+    bson_ext (~> 1.12)
+      bson (~> 1.12)
     json (1.8.1)
     kgio (2.9.2)
-    mongo (1.11.1)
-      bson (= 1.11.1)
+    mongo (~> 1.12)
+      bson (~> 1.12)
     rack (1.5.2)
     raindrops (0.13.0)
     sinatra (1.1.0)
