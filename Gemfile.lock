@@ -1,20 +1,20 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bson (~> 1.12)
-    bson_ext (~> 1.12)
-      bson (~> 1.12)
-    json (1.8.1)
-    kgio (2.9.2)
-    mongo (~> 1.12)
-      bson (~> 1.12)
-    rack (1.5.2)
-    raindrops (0.13.0)
+    bson (1.12.3)
+    bson_ext (1.12.3)
+      bson (~> 1.12.3)
+    json (1.8.3)
+    kgio (2.10.0)
+    mongo (1.12.3)
+      bson (= 1.12.3)
+    rack (1.6.4)
+    raindrops (0.15.0)
     sinatra (1.1.0)
       rack (~> 1.1)
       tilt (~> 1.1)
     tilt (1.4.1)
-    unicorn (4.8.3)
+    unicorn (4.9.0)
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
@@ -23,8 +23,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bson_ext
+  bson_ext (~> 1.12)
   json
-  mongo
+  mongo (~> 1.12)
   sinatra (= 1.1.0)
   unicorn
