@@ -28,3 +28,9 @@ DEPENDENCIES
   mongo (~> 1.12)
   sinatra (= 1.1.0)
   unicorn
+
+RUBY VERSION
+   ruby 2.3.3p222
+
+BUNDLED WITH
+   1.16.1

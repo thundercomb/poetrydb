@@ -27,6 +27,10 @@ class Web < Sinatra::Base
     }.to_json
   end
 
+  after do
+    response.headers['Access-Control-Allow-Origin'] = '*'
+  end
+
   get '/' do
     redirect '/index.html'
   end
