@@ -1,5 +1,5 @@
 source "https://rubygems.org"
-ruby '2.6.0'
+ruby '2.4.5'
 gem 'sinatra', '1.1.0'
 gem 'unicorn'
 gem 'mongo', '~> 1.12'
