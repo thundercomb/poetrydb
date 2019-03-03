@@ -1,7 +1,6 @@
 source "https://rubygems.org"
-ruby '2.4.5'
-gem 'sinatra', '1.1.0'
+ruby '2.6.0'
+gem 'sinatra', '2.0.5'
 gem 'unicorn'
-gem 'mongo', '~> 1.12'
+gem 'mongo', '2.7.1'
 gem 'json'
-gem 'bson_ext', '~> 1.12'
