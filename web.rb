@@ -6,10 +6,10 @@ include Mongo
 
 class Web < Sinatra::Base
   configure do
-    mongo_uri = ENV['MONGOLAB_URI']
+    mongo_uri = ENV['MONGODB_URI']
     db_name = mongo_uri[%r{/([^/\?]+)(\?|$)}, 1]
-    client = MongoClient.from_uri(mongo_uri)
-    db = client.db(db_name)
+    client = Mongo::Client.new(mongo_uri, :database => db_name)
+    db = client.database
 
     set :root, File.dirname(__FILE__)
     set :public_folder, './public'
