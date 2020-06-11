@@ -1,0 +1,45 @@
+{
+  "poem": [
+    {
+      "title": "Said Death to Passion",
+      "author": "Emily Dickinson",
+      "lines": [
+        "Said Death to Passion",
+        "\"Give of thine an Acre unto me.\"",
+        "Said Passion, through contracting Breaths",
+        "\"A Thousand Times Thee Nay.\"",
+        "",
+        "Bore Death from Passion",
+        "All His East",
+        "He -- sovereign as the Sun",
+        "Resituated in the West",
+        "And the Debate was done."
+      ],
+      "linecount": "9"
+    },{
+      "title": "The Moon Maiden's Song",
+      "author": "Ernest Dowson",
+      "lines": [
+        "Sleep! Cast thy canopy",
+        "   Over this sleeper's brain,",
+        "Dim grow his memory,",
+        "   When he wake again.",
+        "",
+        "Love stays a summer night,",
+        "   Till lights of morning come;",
+        "Then takes her winged flight",
+        "   Back to her starry home.",
+        "",
+        "Sleep! Yet thy days are mine;",
+        "   Love's seal is over thee:",
+        "Far though my ways from thine,",
+        "   Dim though thy memory.",
+        "",
+        "Love stays a summer night,",
+        "   Till lights of morning come;",
+        "Then takes her winged flight",
+        "   Back to her starry home."
+      ],
+      "linecount": "16"
+    } ]
+}

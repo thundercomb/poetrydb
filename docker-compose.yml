@@ -1,0 +1,25 @@
+version: '3'
+services:
+  mongo:
+    image: mongo
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - ./mongo-volume:/data/db
+  poetrydb:
+    build: .
+    container_name: poetrydb
+    environment:
+      - MONGODB_URI=mongodb://mongo:27017/test
+    command: bash -c "ruby /poetrydb/tools/db_populate.rb /poetrydb/tools/test.json &&
+                      cd app &&
+                      bundle exec unicorn -p 3000 -c unicorn.rb"
+    volumes:
+      - ./:/poetrydb
+    ports:
+      - "3000:3000"
+    links:
+      - mongo
+    depends_on:
+      - mongo
