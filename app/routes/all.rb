@@ -2,6 +2,19 @@ require 'sinatra'
 
 class Web < Sinatra::Base
 
+  get '/random' do
+    content_type :json
+
+    settings.poetry_coll.aggregate(
+      [ { "$sample": { "size": 1} } ]
+    ).each { |i| @data = i  }
+
+    # remove _id output field
+    @data.delete('_id')
+
+    respond @data
+  end
+
   get '/:key' do
     content_type :json
 
