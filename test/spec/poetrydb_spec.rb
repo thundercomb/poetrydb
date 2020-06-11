@@ -11,6 +11,17 @@ describe('view home page', {:type => :feature}) do
   end
 end
 
+describe('retrieve random poem', {:type => :feature}) do
+  it('go to endpoint for a random poem') do
+    response = TestHttp.get('/random')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+end
+
 describe('retrieve poems by author only', {:type => :feature}) do
   it('go to endpoint for poems by author matching "Dowson"') do
     response = TestHttp.get('/author/Dowson')

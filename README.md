@@ -91,6 +91,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: The title, or part of the title, of a poem  
   ```lines```: Part of a line or lines of a poem  
   ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)  
+  ```random```: A random poem  
 
 * ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
 
@@ -103,22 +104,22 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 
   ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```  
   ```Default (empty)```: match ```<search term>``` with any part of ```<input field>``` when searching  
-  
+
 * ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:  
-  
+
   ```author```: Return only the author of each of the matching poems  
   ```title```: Return only the title of each of the matching poems  
   ```lines```: Return only the lines of each of the matching poems  
   ```linecount```: Return only the number of lines of each of the matching poems  
   ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems  
   ```Default (empty)```: Return all data of each of the matching poems  
-  
+
   or:  
-  
+
   ```all```: Return all data of the matching poems (same as ```Default (empty)```)  
-  
+
 * ```[.<format>]``` is optional. It can be:  
-  
+
   ```.json```: Return data in json format  
   ```.text```: Return data in text format  
   ```Default (empty)```: Return data in json format  
@@ -672,6 +673,48 @@ author
 William Topaz McGonagall
 ```
 
+### Random
+
+<b>General Format:</b>
+```
+/random
+```
+
+Format:
+```
+/random
+```
+Example:
+```
+/random
+```
+Result:
+```
+[
+  {
+    "title": "Sonnet XLIV: Press'd by the Moon",
+    "author": "Charlotte Smith",
+    "lines": [
+      "Press'd by the Moon, mute arbitress of tides,",
+      "While the loud equinox its power combines,",
+      "The sea no more its swelling surge confines,",
+      "But o'er the shrinking land sublimely rides.",
+      "The wild blast, rising from the Western cave,",
+      "Drives the huge billows from their heaving bed;",
+      "Tears from their grassy tombs the village dead,",
+      "And breaks the silent sabbath of the grave!",
+      "With shells and sea-weed mingled, on the shore",
+      "Lo! their bones whiten in the frequent wave;",
+      "But vain to them the winds and waters rave;",
+      "They hear the warring elements no more:",
+      "While I am doom'd—by life's long storm opprest,",
+      "To gaze with envy on their gloomy rest."
+    ],
+    "linecount": "14"
+  }
+]
+```
+
 ### Combinations
 
 <b>General Format:</b>
@@ -679,7 +722,7 @@ William Topaz McGonagall
 /<input field>,<input field>[,<input field>][..]/<search term>;<search term>[;<search term][..][:abs][/<output field>][,<output field>][..][.<format>]
 ```
 
-Notes: 
+Notes:
 1. The number of input fields should always be matched by the number of search terms
 2. The search terms are separated by the semicolon to allow commas to be used in search terms. However, semicolons are a feature of many texts, and unfortunately cannot be part of the search term currently.
 
@@ -830,7 +873,7 @@ Winter
 
 ## Contact
 
-Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @po3db 
+Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @po3db
 
 ## License
 
