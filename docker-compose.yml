@@ -13,7 +13,6 @@ services:
     environment:
       - MONGODB_URI=mongodb://mongo:27017/test
     command: bash -c "ruby /poetrydb/tools/db_populate.rb /poetrydb/tools/test.json &&
-                      cd app &&
                       bundle exec unicorn -p 3000 -c unicorn.rb"
     volumes:
       - ./:/poetrydb

@@ -4,5 +4,5 @@ RUN apt-get install -y mongodb-clients
 
 RUN mkdir /poetrydb
 COPY ./ /poetrydb
-WORKDIR /poetrydb
+WORKDIR /poetrydb/app
 RUN bundle install
