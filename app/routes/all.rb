@@ -32,9 +32,9 @@ class Web < Sinatra::Base
   get '/:keys/:search/all.?:format?' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'linecount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, and linecount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, and linecount allowed."
       )
     end
 
@@ -62,9 +62,9 @@ class Web < Sinatra::Base
   get '/:keys/:search/:fields' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'linecount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, and linecount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, and linecount allowed."
       )
     end
 
@@ -104,9 +104,9 @@ class Web < Sinatra::Base
   get '/:keys/:search' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'linecount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, and linecount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, 'lines', and linecount allowed."
       )
     end
 
