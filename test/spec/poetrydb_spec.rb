@@ -219,14 +219,14 @@ describe('provide invalid input field', {:type => :feature}) do
   it('go to endpoint for poems using "wrong" as input field, and valid search field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
     expect(response.code).to be 200
   end
 
   it('go to endpoint for poems using "wrong" as input field, with valid search field, and "all" output field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
     expect(response.code).to be 200
   end
 
@@ -234,7 +234,7 @@ describe('provide invalid input field', {:type => :feature}) do
     response = TestHttp.get('/wrong,linecount/Dowson;16:abs/title,lines,linecount')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
     expect(response.code).to be 200
   end
 end
