@@ -180,9 +180,10 @@ end
 
 describe('provide poemcount input field', {:type => :feature}) do
   it('provide author, lines, and poemcount input and search fields with poemcount set to 1') do
-    response = TestHttp.get('/lines,author,poemcount/the;e;1')
-    expect(response.body).to include('And the Debate was done.')
+    response = TestHttp.get('/author,lines,poemcount/Dickinson;Death%20to;1')
+    expect(response.body).to include('Bereavement in their death to feel')
     expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).not_to include('And the Debate was done.')
     expect(response.body).to include('"title":')
     expect(response.body).to include('"author":')
     expect(response.body).to include('"lines":')
@@ -191,9 +192,10 @@ describe('provide poemcount input field', {:type => :feature}) do
   end
 
   it('provide author, lines, and poemcount input and search fields with poemcount set to 2') do
-    response = TestHttp.get('/lines,author,poemcount/the;e;2')
+    response = TestHttp.get('/author,lines,poemcount/Dickinson;Death%20to;2')
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('And the Debate was done.')
-    expect(response.body).to include('Love stays a summer night')
     expect(response.body).to include('"title":')
     expect(response.body).to include('"author":')
     expect(response.body).to include('"lines":')
@@ -202,9 +204,10 @@ describe('provide poemcount input field', {:type => :feature}) do
   end
 
   it('provide author, lines, and poemcount input and search fields with poemcount set to 1000') do
-    response = TestHttp.get('/lines,author,poemcount/the;e;1000')
+    response = TestHttp.get('/author,lines,poemcount/Dickinson;Death%20to;1000')
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('And the Debate was done.')
-    expect(response.body).to include('Love stays a summer night')
     expect(response.body).to include('"title":')
     expect(response.body).to include('"author":')
     expect(response.body).to include('"lines":')
@@ -213,9 +216,10 @@ describe('provide poemcount input field', {:type => :feature}) do
   end
 
   it('provide author, lines, and poemcount input and search fields, and all output fields, with poemcount set to 1') do
-    response = TestHttp.get('/lines,author,poemcount/the;e;1/all.text')
-    expect(response.body).to include('And the Debate was done.')
+    response = TestHttp.get('/author,lines,poemcount/Dickinson;Death%20to;1/all.text')
+    expect(response.body).to include('Bereavement in their death to feel')
     expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).not_to include('And the Debate was done.')
     expect(response.body).to include("title\n")
     expect(response.body).to include("author\n")
     expect(response.body).to include("lines\n")
@@ -223,10 +227,11 @@ describe('provide poemcount input field', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
-  it('provide author, lines, and poemcount input and search fields with poemcount set to 1') do
-    response = TestHttp.get('/lines,author,poemcount/the;e;1/lines.json')
-    expect(response.body).to include('And the Debate was done.')
+  it('provide author, lines, and poemcount input and search fields, with poemcount set to 1, returning lines as json') do
+    response = TestHttp.get('/author,lines,poemcount/Dickinson;Death%20to;1/lines.json')
+    expect(response.body).to include('Bereavement in their death to feel')
     expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).not_to include('And the Debate was done.')
     expect(response.body).not_to include('"title":')
     expect(response.body).not_to include('"author":')
     expect(response.body).to include('"lines":')
