@@ -679,7 +679,7 @@ William Topaz McGonagall
 
 <b>General Format:</b>
 ```
-/<input field>[,<input field>][..],poemcount/<search term>[;<search term][..],<poemcount>[/<output field>][,<output field>][..][.<format>]
+/<input field>[,<input field>][..],poemcount/<search term>[;<search term][..];<poemcount>[/<output field>][,<output field>][..][.<format>]
 ```
 
 Notes:
