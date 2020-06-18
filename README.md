@@ -91,6 +91,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: The title, or part of the title, of a poem  
   ```lines```: Part of a line or lines of a poem  
   ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)  
+  ```poemcount```: The number of poems to return  
   ```random```: A random poem  
 
 * ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
@@ -98,7 +99,8 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem  
   ```title```: ```<field data>``` is the title, or part of the title, of a poem  
   ```lines```: ```<field data>``` is part of a line or lines of a poem  
-  ```linecount```: ```<field data>``` is the number of lines of a poem (use with ```:abs``` to avoid fuzzy search, eg. "14" also implies "114"). Number of lines includes section headings, but excludes empty lines (eg. section breaks)
+  ```linecount```: ```<field data>``` is the number of lines of a poem (use with ```:abs``` to avoid fuzzy search, eg. "14" also implies "114"). Number of lines includes section headings, but excludes empty lines (eg. section breaks)  
+  ```poemcount```: ```<field data>``` is the number of poems to return
 
 * ```[:<search type>]``` is optional. It can be:
 
@@ -673,6 +675,116 @@ author
 William Topaz McGonagall
 ```
 
+### Poemcount
+
+<b>General Format:</b>
+```
+/<input field>[,<input field>][..],poemcount/<search term>[;<search term][..];<poemcount>[/<output field>][,<output field>][..][.<format>]
+```
+
+Notes:
+- poemcount can't be provided on its own, it functions in combination with other input fields
+- poemcount is always exact, and therefore the match type ```:abs``` has no effect.
+
+Format:
+```
+/<input field>,poemcount/<search term>;<poemcount>
+```
+Example:
+```
+/author,poemcount/Dickinson;2
+```
+Result:
+```
+[
+  {
+    "title": "Not at Home to Callers",
+    "author": "Emily Dickinson",
+    "lines": [
+      "Not at Home to Callers",
+      "Says the Naked Tree --",
+      "Bonnet due in April --",
+      "Wishing you Good Day --"
+    ],
+    "linecount": "4"
+  },
+  {
+    "title": "Defrauded I a Butterfly --",
+    "author": "Emily Dickinson",
+    "lines": [
+      "Defrauded I a Butterfly --",
+      "The lawful Heir -- for Thee --"
+    ],
+    "linecount": "2"
+  }
+]
+```
+
+Format:
+```
+/<input field>,poemcount/<search term>;<poemcount>/<output field>
+```
+Example:
+```
+/author,poemcount/Dickinson;2/title
+```
+Result:
+```
+[
+  {
+    "title": "Not at Home to Callers"
+  },
+  {
+    "title": "Defrauded I a Butterfly --"
+  }
+]
+```
+
+Format:
+```
+/<input field>,poemcount/<search term>;<poemcount>/<output field>,<output field>,<output field>
+```
+Example:
+```
+/author,poemcount/Dickinson;2/author,title,linecount
+```
+Result:
+```
+[
+  {
+    "title": "Not at Home to Callers",
+    "author": "Emily Dickinson",
+    "linecount": "4"
+  },
+  {
+    "title": "Defrauded I a Butterfly --",
+    "author": "Emily Dickinson",
+    "linecount": "2"
+  }
+]
+```
+
+Format:
+```
+/<input field>,poemcount/<search term>;<poemcount>/<output field>,<output field>.<format>
+```
+Example:
+```
+/author,poemcount/Dickinson;2/author,title.text
+```
+Result:
+```
+title
+Not at Home to Callers
+author
+Emily Dickinson
+
+title
+Defrauded I a Butterfly --
+author
+Emily Dickinson
+```
+
 ### Random
 
 <b>General Format:</b>
@@ -786,7 +898,6 @@ Format:
 ```
 /<input field>,<input field>,<input field>/<search term>;<search term>;<search term>:abs
 ```
-Note: The search type ```:abs``` applies to <b>all</b> the search terms, not just the preceding search term.
 
 Example:
 ```
@@ -820,6 +931,40 @@ Result:
       "While greasy Joan doth keel the pot."
     ],
     "linecount": 18
+  }
+]
+Format:
+```
+/<input field>,<input field>,<input field>,<input field>/<search term>;<search term>;<search term>;<search term>
+```
+
+Example:
+```
+/title,author,linecount,poemcount/Winter;William Shakespeare;14;1
+```
+Result:
+```
+[
+  {
+    "title": "Sonnet 2: When forty winters shall besiege thy brow",
+    "author": "William Shakespeare",
+    "lines": [
+      "When forty winters shall besiege thy brow,",
+      "And dig deep trenches in thy beauty's field,",
+      "Thy youth's proud livery so gazed on now,",
+      "Will be a tatter'd weed of small worth held:",
+      "Then being asked, where all thy beauty lies,",
+      "Where all the treasure of thy lusty days;",
+      "To say, within thine own deep sunken eyes,",
+      "Were an all-eating shame, and thriftless praise.",
+      "How much more praise deserv'd thy beauty's use,",
+      "If thou couldst answer 'This fair child of mine",
+      "Shall sum my count, and make my old excuse,'",
+      "Proving his beauty by succession thine!",
+      "  This were to be new made when thou art old,",
+      "  And see thy blood warm when thou feel'st it cold."
+    ],
+    "linecount": "14"
   }
 ]
 ```

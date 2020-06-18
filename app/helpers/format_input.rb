@@ -7,6 +7,8 @@ class Web < Sinatra::Base
     search_hash.keys.each do |key|
       if search_hash["#{key}"] == nil
         raise "405"
+      elsif key == 'poemcount'
+        search_hash["#{key}"] = search_hash["#{key}"].to_i
       elsif search_hash["#{key}"][-4..-1].eql? ':abs'
         search_hash["#{key}"] = search_hash["#{key}"][0..-5]
       else
