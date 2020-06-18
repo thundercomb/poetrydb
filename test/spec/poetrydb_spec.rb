@@ -178,6 +178,63 @@ describe('provide author and title input fields, exactly matching search terms: 
   end
 end
 
+describe('provide poemcount input field', {:type => :feature}) do
+  it('provide author, lines, and poemcount input and search fields with poemcount set to 1') do
+    response = TestHttp.get('/lines,author,poemcount/the;e;1')
+    expect(response.body).to include('And the Debate was done.')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide author, lines, and poemcount input and search fields with poemcount set to 2') do
+    response = TestHttp.get('/lines,author,poemcount/the;e;2')
+    expect(response.body).to include('And the Debate was done.')
+    expect(response.body).to include('Love stays a summer night')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide author, lines, and poemcount input and search fields with poemcount set to 1000') do
+    response = TestHttp.get('/lines,author,poemcount/the;e;1000')
+    expect(response.body).to include('And the Debate was done.')
+    expect(response.body).to include('Love stays a summer night')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide author, lines, and poemcount input and search fields, and all output fields, with poemcount set to 1') do
+    response = TestHttp.get('/lines,author,poemcount/the;e;1/all.text')
+    expect(response.body).to include('And the Debate was done.')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).to include("title\n")
+    expect(response.body).to include("author\n")
+    expect(response.body).to include("lines\n")
+    expect(response.body).to include("linecount\n")
+    expect(response.code).to be 200
+  end
+
+  it('provide author, lines, and poemcount input and search fields with poemcount set to 1') do
+    response = TestHttp.get('/lines,author,poemcount/the;e;1/lines.json')
+    expect(response.body).to include('And the Debate was done.')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).not_to include('"title":')
+    expect(response.body).not_to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).not_to include('"linecount":')
+    expect(response.code).to be 200
+  end
+end
+
 # 404
 
 describe('provide search field that matches no poem', {:type => :feature}) do
@@ -219,14 +276,14 @@ describe('provide invalid input field', {:type => :feature}) do
   it('go to endpoint for poems using "wrong" as input field, and valid search field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
     expect(response.code).to be 200
   end
 
   it('go to endpoint for poems using "wrong" as input field, with valid search field, and "all" output field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
     expect(response.code).to be 200
   end
 
@@ -234,7 +291,7 @@ describe('provide invalid input field', {:type => :feature}) do
     response = TestHttp.get('/wrong,linecount/Dowson;16:abs/title,lines,linecount')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, and linecount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
     expect(response.code).to be 200
   end
 end

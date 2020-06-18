@@ -29,12 +29,35 @@ class Web < Sinatra::Base
     respond @data
   end
 
+  get '/:keys/:search' do
+    content_type :json
+
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
+      return json_status(
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
+      )
+    end
+
+    begin
+      search_hash = format_input(params[:keys],params[:search])
+    rescue Exception => e
+      if e.message == '405'
+        return json_status(
+          '405', 'Comma delimited fields must have corresponding semicolon delimited search terms, eg. /title,author/Winter;Shakespeare'
+        )
+      end
+    end
+
+    @data = find_data(search_hash)
+    respond @data
+  end
+
   get '/:keys/:search/all.?:format?' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, and linecount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
       )
     end
 
@@ -55,16 +78,16 @@ class Web < Sinatra::Base
       end
     end
 
-    @data = new_find_data(search_hash)
+    @data = find_data(search_hash)
     respond @data, output_format
   end
 
   get '/:keys/:search/:fields' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, and linecount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
       )
     end
 
@@ -97,30 +120,8 @@ class Web < Sinatra::Base
       output_fields["#{field}"] = 1
     end
 
-    @data = new_find_data(search_hash, output_fields)
+    @data = find_data(search_hash, output_fields)
     respond @data, output_format
   end
 
-  get '/:keys/:search' do
-    content_type :json
-
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount']).length > 0
-      return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, 'lines', and linecount allowed."
-      )
-    end
-
-    begin
-      search_hash = format_input(params[:keys],params[:search])
-    rescue Exception => e
-      if e.message == '405'
-        return json_status(
-          '405', 'Comma delimited fields must have corresponding semicolon delimited search terms, eg. /title,author/Winter;Shakespeare'
-        )
-      end
-    end
-
-    @data = new_find_data(search_hash)
-    respond @data
-  end
 end
