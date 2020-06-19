@@ -106,18 +106,6 @@ describe('view title,lines,linecount of poems by author matching a string in the
   end
 end
 
-describe('view author, linecount of poems by author that contains number of lines', {:type => :feature}) do
-  it('go to endpoint for poems by author matching "Dowson", matching "6" lines, and retrieve titles, lines, and linecount as json') do
-    response = TestHttp.get('/author,linecount/Dowson;6/title,lines,linecount')
-    expect(response.body).to include('Love stays a summer night')
-    expect(response.body).to include('"title":')
-    expect(response.body).not_to include('"author":')
-    expect(response.body).to include('"lines":')
-    expect(response.body).to include('"linecount":')
-    expect(response.code).to be 200
-  end
-end
-
 describe('view author, linecount of poems by author that have specific number of lines', {:type => :feature}) do
   it('go to endpoint for poems by author matching "Dowson", matching exactly "16" lines, and retrieve titles, lines, and linecount as json') do
     response = TestHttp.get('/author,linecount/Dowson;16:abs/title,lines,linecount')
@@ -243,12 +231,22 @@ end
 # 404
 
 describe('provide search field that matches no poem', {:type => :feature}) do
-  it('go to endpoint for poems by Dowson with 6 lines') do
+  it('go to endpoint for poems by Dowson with 6 lines, using :abs') do
     response = TestHttp.get('/author,linecount/Dowson;6:abs/title,lines,linecount')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('404')
     expect(response.body).to include('Not found')
     expect(response.code).to be 200
+  end
+
+  describe('view author, linecount of poems by author that contains number of lines', {:type => :feature}) do
+    it('go to endpoint for poems by Dowson with 6 lines') do
+      response = TestHttp.get('/author,linecount/Dowson;6/title,lines,linecount')
+      expect(response.body).not_to include('Love stays a summer night')
+      expect(response.body).to include('404')
+      expect(response.body).to include('Not found')
+      expect(response.code).to be 200
+    end
   end
 
   it('go to endpoint for poems by Dickinson with non-existing title "Said" (matched exactly)') do
