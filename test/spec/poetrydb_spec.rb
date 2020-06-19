@@ -11,17 +11,6 @@ describe('view home page', {:type => :feature}) do
   end
 end
 
-describe('retrieve random poem', {:type => :feature}) do
-  it('go to endpoint for a random poem') do
-    response = TestHttp.get('/random')
-    expect(response.body).to include('"title":')
-    expect(response.body).to include('"author":')
-    expect(response.body).to include('"lines":')
-    expect(response.body).to include('"linecount":')
-    expect(response.code).to be 200
-  end
-end
-
 describe('retrieve poems by author only', {:type => :feature}) do
   it('go to endpoint for poems by author matching "Dowson"') do
     response = TestHttp.get('/author/Dowson')
@@ -228,6 +217,63 @@ describe('provide poemcount input field', {:type => :feature}) do
   end
 end
 
+describe('provide random input field', {:type => :feature}) do
+  it('retrieve a single random poem') do
+    response = TestHttp.get('/random')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide random and author input and search fields with random set to 1') do
+    response = TestHttp.get('/author,random/Dickinson;1')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"Emily Dickinson"')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide random and author input and search fields with random set to 1, with output fields') do
+    response = TestHttp.get('/author,random/Dickinson;1/author,lines')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).not_to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"Emily Dickinson"')
+    expect(response.body).to include('"lines":')
+    expect(response.body).not_to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide random, title, and author input and search fields with random set to 1, with output fields') do
+    response = TestHttp.get('/author,title,random/Dickinson;Death%20to;1/title,lines')
+    expect(response.body).to include('eath to')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).to include('"title":')
+    expect(response.body).not_to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).not_to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('provide random and author input and search fields with random set to 2') do
+    response = TestHttp.get('/author,random/Dickinson;2')
+    expect(response.body).not_to include('Love stays a summer night')
+    expect(response.body).to include('Strangers do not mourn')
+    expect(response.body).to include('through contracting Breaths')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"Emily Dickinson"')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('},')
+    expect(response.code).to be 200
+  end
+end
+
 # 404
 
 describe('provide search field that matches no poem', {:type => :feature}) do
@@ -279,14 +325,14 @@ describe('provide invalid input field', {:type => :feature}) do
   it('go to endpoint for poems using "wrong" as input field, and valid search field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 
   it('go to endpoint for poems using "wrong" as input field, with valid search field, and "all" output field') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 
@@ -294,7 +340,7 @@ describe('provide invalid input field', {:type => :feature}) do
     response = TestHttp.get('/wrong,linecount/Dowson;16:abs/title,lines,linecount')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount allowed.')
+    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 end
@@ -339,6 +385,40 @@ describe('provide invalid output field', {:type => :feature}) do
     response = TestHttp.get('/author/Dowson/wrong,lines.bad')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
+    expect(response.code).to be 200
+  end
+end
+
+describe('provide poemcount and random together as input fields', {:type => :feature}) do
+  it('provide poemcount and random input fields and search fields') do
+    response = TestHttp.get('/poemcount,random/1;1')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Use either poemcount or random as input fields, but not both.')
+    expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
+  it('provide poemcount and random input fields and search fields, with output fields') do
+    response = TestHttp.get('/poemcount,random/1;1/all.text')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Use either poemcount or random as input fields, but not both.')
+    expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
+  it('provide poemcount, random, and other input fields and search fields') do
+    response = TestHttp.get('/author,poemcount,random/Dowson;1;1')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Use either poemcount or random as input fields, but not both.')
+    expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
+  it('provide poemcount, random, and other input fields and search fields, with output fields') do
+    response = TestHttp.get('/author,poemcount,random/Dowson;1;1/title.json')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Use either poemcount or random as input fields, but not both.')
+    expect(response.body).not_to include('"title":')
     expect(response.code).to be 200
   end
 end
