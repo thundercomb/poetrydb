@@ -99,7 +99,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem  
   ```title```: ```<field data>``` is the title, or part of the title, of a poem  
   ```lines```: ```<field data>``` is part of a line or lines of a poem  
-  ```linecount```: ```<field data>``` is the number of lines of a poem (use with ```:abs``` to avoid fuzzy search, eg. "14" also implies "114"). Number of lines includes section headings, but excludes empty lines (eg. section breaks)  
+  ```linecount```: ```<field data>``` is the number of lines of a poem. Number of lines includes section headings, but excludes empty lines (eg. section breaks)  
   ```poemcount```: ```<field data>``` is the number of poems to return
 
 * ```[:<search type>]``` is optional. It can be:
@@ -546,7 +546,7 @@ linecount
 /linecount/<linecount>[/<output field>][,<output field>][..][.<format>]
 ```
 
-Note: linecount is always exact, and therefore the match type ```:abs``` is not applicable.
+Note: linecount is always exact, and therefore the match type ```:abs``` has no effect.
 
 Format:
 ```
@@ -683,7 +683,7 @@ William Topaz McGonagall
 ```
 
 Notes:
-- poemcount can't be provided on its own, it functions in combination with other input fields
+- although poemcount can be provided on its own, it is more versatile when combined with other input fields
 - poemcount is always exact, and therefore the match type ```:abs``` has no effect.
 
 Format:
@@ -896,12 +896,12 @@ Result:
 
 Format:
 ```
-/<input field>,<input field>,<input field>/<search term>;<search term>;<search term>:abs
+/<input field>,<input field>/<search term>:abs;<search term>
 ```
 
 Example:
 ```
-/title,author,linecount/Winter;William Shakespeare;18:abs
+/title,author/Winter:abs;William%20Shakespeare
 ```
 Result:
 ```
