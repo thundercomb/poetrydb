@@ -91,8 +91,8 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: The title, or part of the title, of a poem  
   ```lines```: Part of a line or lines of a poem  
   ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)  
-  ```poemcount```: The number of poems to return  
-  ```random```: A random poem  
+  ```poemcount```: The number of poems to return (cannot be used in combination with `random`)
+  ```random```: The number of random poems to return (cannot be used in combination with `poemcount`)
 
 * ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
 
@@ -100,7 +100,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: ```<field data>``` is the title, or part of the title, of a poem  
   ```lines```: ```<field data>``` is part of a line or lines of a poem  
   ```linecount```: ```<field data>``` is the number of lines of a poem. Number of lines includes section headings, but excludes empty lines (eg. section breaks)  
-  ```poemcount```: ```<field data>``` is the number of poems to return
+  ```poemcount```: ```<field data>``` is the number of poems to return  
   ```random```: ```<field data>``` is the number of random poems to return
 
 * ```[:<search type>]``` is optional. It can be:
@@ -684,9 +684,9 @@ William Topaz McGonagall
 ```
 
 Notes:
-- although poemcount can be provided on its own, it is more versatile when combined with other input fields
+- although poemcount can be provided on its own, it makes sense mainly when combined with other input fields
 - poemcount is always exact, and therefore the match type ```:abs``` has no effect
-- poemcount and random cannot be used together, as both specify a count as the search field
+- poemcount and random cannot be used together, as both specify the number of poems to return
 
 Format:
 ```
@@ -796,7 +796,7 @@ Emily Dickinson
 
 Note:
 - the random count search field is always exact, and therefore the match type ```:abs``` has no effect
-- random and poemcount cannot be used together, as both specify a count as the search field
+- random and poemcount cannot be used together, as both specify the number of poems to return
 
 Format:
 ```
