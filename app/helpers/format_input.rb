@@ -11,7 +11,7 @@ class Web < Sinatra::Base
         # linecount is a string field in the database
         # use cast to integer and back as trick to drop modifiers like ':abs'
         search_hash["#{key}"] = search_hash["#{key}"].to_i.to_s
-      elsif key == 'poemcount'
+      elsif key == 'poemcount' or key == 'random'
         # poemcount should be an integer - cast drops modifiers like ':abs'
         search_hash["#{key}"] = search_hash["#{key}"].to_i
       elsif search_hash["#{key}"][-4..-1].eql? ':abs'

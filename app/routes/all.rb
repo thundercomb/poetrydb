@@ -32,9 +32,15 @@ class Web < Sinatra::Base
   get '/:keys/:search' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+      )
+    end
+
+    if params[:keys].split(',').include?('poemcount') and params[:keys].split(',').include?('random')
+      return json_status(
+        '405',"Use either poemcount or random as input fields, but not both."
       )
     end
 
@@ -55,9 +61,15 @@ class Web < Sinatra::Base
   get '/:keys/:search/all.?:format?' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+      )
+    end
+
+    if params[:keys].split(',').include?('poemcount') and params[:keys].split(',').include?('random')
+      return json_status(
+        '405',"Use either poemcount or random as input fields, but not both."
       )
     end
 
@@ -85,9 +97,15 @@ class Web < Sinatra::Base
   get '/:keys/:search/:fields' do
     content_type :json
 
-    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount']).length > 0
+    if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount allowed."
+        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+      )
+    end
+
+    if params[:keys].split(',').include?('poemcount') and params[:keys].split(',').include?('random')
+      return json_status(
+        '405',"Use either poemcount or random as input fields, but not both."
       )
     end
 
