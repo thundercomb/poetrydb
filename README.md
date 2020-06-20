@@ -101,6 +101,7 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```lines```: ```<field data>``` is part of a line or lines of a poem  
   ```linecount```: ```<field data>``` is the number of lines of a poem. Number of lines includes section headings, but excludes empty lines (eg. section breaks)  
   ```poemcount```: ```<field data>``` is the number of poems to return
+  ```random```: ```<field data>``` is the number of random poems to return
 
 * ```[:<search type>]``` is optional. It can be:
 
@@ -684,7 +685,8 @@ William Topaz McGonagall
 
 Notes:
 - although poemcount can be provided on its own, it is more versatile when combined with other input fields
-- poemcount is always exact, and therefore the match type ```:abs``` has no effect.
+- poemcount is always exact, and therefore the match type ```:abs``` has no effect
+- poemcount and random cannot be used together, as both specify a count as the search field
 
 Format:
 ```
@@ -789,8 +791,12 @@ Emily Dickinson
 
 <b>General Format:</b>
 ```
-/random
+/random[/<random count>][/<output field>][,<output field>][..][.<format>]
 ```
+
+Note:
+- the random count search field is always exact, and therefore the match type ```:abs``` has no effect
+- random and poemcount cannot be used together, as both specify a count as the search field
 
 Format:
 ```
@@ -827,6 +833,142 @@ Result:
 ]
 ```
 
+Format:
+```
+/random/<random count>
+```
+Example:
+```
+/random/3
+```
+Result:
+```
+[
+  {
+    "title": "421. Epitaph on a Lap-dog",
+    "author": "Robert Burns",
+    "lines": [
+      "IN wood and wild, ye warbling throng,",
+      "  Your heavy loss deplore;",
+      "Now, half extinct your powers of song,",
+      "  Sweet Echo is no more.",
+.
+.
+.
+    ],
+    "linecount": "8"
+  },
+  {
+    "title": "The Canterbury Tales. The Manciple's Tale.",
+    "author": "Geoffrey Chaucer",
+    "lines": [
+      "THE PROLOGUE.",
+      "",
+      "WEET ye not where there stands a little town,",
+      "Which that y-called is Bob-up-and-down,",
+      "Under the Blee, in Canterbury way?",
+      "There gan our Hoste for to jape and play,",
+.
+.
+.
+    ],
+    "linecount": "364"
+  },
+  {
+    "title": "Love",
+    "author": "Percy Bysshe Shelley",
+    "lines": [
+      "Why is it said thou canst not live",
+      "In a youthful breast and fair,",
+      "Since thou eternal life canst give,",
+      "Canst bloom for ever there?",
+.
+.
+.
+  ],
+    "linecount": "24"
+  }
+]
+```
+
+Format:
+```
+/random/<random count>/<output field>
+```
+Example:
+```
+/random/3/title
+```
+Result:
+```
+[
+  {
+    "title": "130. Nature’s Law: A Poem"
+  },
+  {
+    "title": "Longings for Home."
+  },
+  {
+    "title": "Buried Life, The"
+  }
+]
+```
+
+Format:
+```
+/random/<random count>/<output field>,<output field>,<output field>
+```
+Example:
+```
+/random/3/author,title,linecount
+```
+Result:
+```
+[
+  {
+    "title": "The Baby's Dance",
+    "author": "Ann Taylor",
+    "linecount": "8"
+  },
+  {
+    "title": "478. Epigram on a Suicide",
+    "author": "Robert Burns",
+    "linecount": "4"
+  },
+  {
+    "title": "Reply to Some Verses of J. M. B. Pigot, Esq., on the Cruelty of His Mistress",
+    "author": "George Gordon, Lord Byron",
+    "linecount": "48"
+  }
+]
+```
+
+Format:
+```
+/random/<random count>/<output field>,<output field>.<format>
+```
+Example:
+```
+/random/3/author,title.text
+```
+Result:
+```
+title
+Pain In Pleasure
+author
+Elizabeth Barrett Browning
+
+title
+The Heaven vests for Each
+author
+Emily Dickinson
+
+title
+Sonnet XXXIX: Prepare Your Wreaths
+author
+Robinson
+```
+
 ### Combinations
 
 <b>General Format:</b>
@@ -838,6 +980,63 @@ Notes:
 1. The number of input fields should always be matched by the number of search terms
 2. The search terms are separated by the semicolon to allow commas to be used in search terms. However, semicolons are a feature of many texts, and unfortunately cannot be part of the search term currently.
 
+Format:
+```
+/<input field>,<input field>/<search term>;<search term>
+```
+Example:
+```
+/title,random/Sonnet;3
+```
+Result:
+```
+[
+  {
+    "title": "Sonnet 63: Against my love shall be as I am now",
+    "author": "William Shakespeare",
+    "lines": [
+      "Against my love shall be as I am now,",
+      "With Time's injurious hand crush'd and o'erworn;",
+      "When hours have drain'd his blood and fill'd his brow",
+      "With lines and wrinkles; when his youthful morn",
+.
+.
+.
+    ],
+    "linecount": "14"
+  },
+  {
+    "title": "Sonnet 69: Those parts of thee that the world's eye doth view",
+    "author": "William Shakespeare",
+    "lines": [
+      "Those parts of thee that the world's eye doth view",
+      "Want nothing that the thought of hearts can mend;",
+      "All tongues--the voice of souls--give thee that due,",
+      "Uttering bare truth, even so as foes commend.",
+.
+.
+.
+    ],
+    "linecount": "14"
+  },
+  {
+    "title": "Sonnet XVII: His Mother Dear Cupid",
+    "author": "Sir Philip Sidney",
+    "lines": [
+      "His mother dear Cupid offended late,",
+      "Because that Mars grown slacker in her love,",
+      "With pricking shot he did not throughly more",
+      "To keep the pace of their first loving state.",
+.
+.
+.
+    ],
+    "linecount": "14"
+  }
+]
+```
+
+@@@@
 Format:
 ```
 /<input field>,<input field>,<input field>/<search term>;<search term>;<search term>

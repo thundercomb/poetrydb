@@ -263,8 +263,6 @@ describe('provide random input field', {:type => :feature}) do
   it('provide random and author input and search fields with random set to 2') do
     response = TestHttp.get('/author,random/Dickinson;2')
     expect(response.body).not_to include('Love stays a summer night')
-    expect(response.body).to include('Strangers do not mourn')
-    expect(response.body).to include('through contracting Breaths')
     expect(response.body).to include('"title":')
     expect(response.body).to include('"author":')
     expect(response.body).to include('"Emily Dickinson"')
