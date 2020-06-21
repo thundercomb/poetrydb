@@ -6,14 +6,14 @@ PoetryDB is an API for internet poets. <i>But what is an API? </i>
 
 An API ensures that a program (such as a browser) always returns data in an expected format. <i>JSON</i> is one of the most popular formats in use today.
 
-"Why should poets care?" [The answer](http://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data winds. Internet technology is making words endlessly manipulable, and traditional poets and writers are getting left behind. I want to change this, by giving us all a leg up into a more empowered future.
+"Why should poets care?" [The answer](https://thecombedthunderclap.blogspot.co.uk/2014/03/kenneth-goldsmith-and-uncreative-writing.html) is blowing in the data winds. Internet technology is making words endlessly manipulable, and traditional poets and writers are getting left behind. I want to change this, by giving us all a leg up into a more empowered future.
 
 <i>How does it work?</i>
 
-You send a URL like [so](http://poetrydb.org/title/Ozymandias/lines.json):
+You send a URL like [so](https://poetrydb.org/title/Ozymandias/lines.json):
 
 ```
-http://poetrydb.org/title/Ozymandias/lines.json
+https://poetrydb.org/title/Ozymandias/lines.json
 ```
 
 And hey, presto! out comes the lines of Shelley's famous sonnet:
@@ -46,11 +46,11 @@ But what do we do with text in json format? The real power of PoetryDB's API bec
 ```
 require 'httparty'
 
-response = HTTParty.get("http://poetrydb.org/author,linecount/Shakespeare;14/lines").to_a
+response = HTTParty.get("https://poetrydb.org/author,linecount/Shakespeare;14/lines").to_a
 (0..13).each { |i| puts response[rand(154)]['lines'][i] }
 ```
 
-This fairly simple code is capable of surprising poetry! The program asks PoetryDB for all poems that are 14 lines in length, then writes out a new sonnet based on the results. Astute readers will know that this is the first step towards creating your own version of Raymond Queneau's [One Hundred Thousand Billion Sonnets](http://www.growndodo.com/wordplay/oulipo/10%5E14sonnets.html), this time based on some of the most beautiful lines ever written in the English language.
+This fairly simple code is capable of surprising poetry! The program asks PoetryDB for all poems that are 14 lines in length, then writes out a new sonnet based on the results. Astute readers will know that this is the first step towards creating your own version of Raymond Queneau's [One Hundred Thousand Billion Sonnets](http://www.bevrowe.info/Queneau/QueneauRandom_v5.html), this time based on some of the most beautiful lines ever written in the English language.
 
 Here is an example:
 
@@ -1221,4 +1221,4 @@ Let me know of any documentation, bugs, or missing features you would like to se
 
 ## License
 
-To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](http://github.com/thundercomb/poetrydb/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
+To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](https://github.com/thundercomb/poetrydb/blob/master/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
