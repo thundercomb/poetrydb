@@ -2,27 +2,16 @@ require 'sinatra'
 
 class Web < Sinatra::Base
 
-  get '/random' do
-    content_type :json
-
-    settings.poetry_coll.aggregate(
-      [ { "$sample": { "size": 1} } ]
-    ).each { |i| @data = i  }
-
-    # remove _id output field
-    @data.delete('_id')
-
-    respond @data
-  end
-
   get '/:key' do
     content_type :json
 
     search_key = params[:key]
-    if ['author', 'authors', 'title', 'titles'].include? search_key
+    if search_key == 'random'
+      @data = find_random()
+    elsif ['author', 'authors', 'title', 'titles'].include? search_key
       @data = find_list(search_key.chomp('s'))
     else
-      @data = json_status(
+      return json_status(
         '405',"#{search_key} list not available. Only author and title allowed."
       )
     end
@@ -34,7 +23,7 @@ class Web < Sinatra::Base
 
     if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+        '405',"#{params[:keys]} input field not available. Only author, title, lines, linecount, and poemcount or random allowed."
       )
     end
 
@@ -63,7 +52,7 @@ class Web < Sinatra::Base
 
     if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+        '405',"#{params[:keys]} input field not available. Only author, title, lines, linecount, and poemcount or random allowed."
       )
     end
 
@@ -99,7 +88,7 @@ class Web < Sinatra::Base
 
     if (params[:keys].split(',') - ['author', 'title', 'lines', 'linecount', 'poemcount', 'random']).length > 0
       return json_status(
-        '405',"#{params[:keys]} list not available. Only author, title, lines, linecount, and poemcount or random allowed."
+        '405',"#{params[:keys]} input field not available. Only author, title, lines, linecount, and poemcount or random allowed."
       )
     end
 
