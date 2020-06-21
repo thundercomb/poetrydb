@@ -1,6 +1,7 @@
 require_relative './format_input'
 require_relative './find_data'
 require_relative './find_list'
+require_relative './find_random'
 require_relative './response_format'
 require_relative './respond'
 require_relative './json_status'

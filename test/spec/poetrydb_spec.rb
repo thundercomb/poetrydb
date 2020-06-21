@@ -729,17 +729,24 @@ describe('Search with invalid input fields:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
+  it('Search by invalid input field, with corresponding search field') do
+    response = TestHttp.get('/wrong/Dowson')
+    expect(response.body).to include('405')
+    expect(response.body).to include('input field not available. Only author, title, lines, linecount, and poemcount or random allowed.')
+    expect(response.code).to be 200
+  end
+
   it('Search by invalid input field; return all output fields; format by text') do
     response = TestHttp.get('/wrong/Dowson/all.text')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
+    expect(response.body).to include('input field not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 
   it('Search by invalid input field; return all output fields; format by json') do
     response = TestHttp.get('/wrong/Dowson/all.json')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
+    expect(response.body).to include('input field not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 
@@ -747,7 +754,7 @@ describe('Search with invalid input fields:', {:type => :feature}) do
     response = TestHttp.get('/wrong,linecount/Dowson;16:abs/title,lines,linecount')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
-    expect(response.body).to include('list not available. Only author, title, lines, linecount, and poemcount or random allowed.')
+    expect(response.body).to include('input field not available. Only author, title, lines, linecount, and poemcount or random allowed.')
     expect(response.code).to be 200
   end
 end
@@ -771,6 +778,22 @@ describe('Search with invalid output fields:', {:type => :feature}) do
     response = TestHttp.get('/author/Dowson/titles')
     expect(response.body).not_to include('Love stays a summer night')
     expect(response.body).to include('405')
+    expect(response.code).to be 200
+  end
+
+  it('Search by valid input fields and insufficient corresponding search fields') do
+    response = TestHttp.get('/author,title/Dowson')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
+    expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
+  it('Search by valid input fields and insufficient corresponding search fields; return all output fields; format as json') do
+    response = TestHttp.get('/author,title/Dowson/all.json')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
+    expect(response.body).not_to include('"title":')
     expect(response.code).to be 200
   end
 
@@ -828,4 +851,13 @@ describe('Search by invalid input field combinations:', {:type => :feature}) do
     expect(response.body).not_to include('"title":')
     expect(response.code).to be 200
   end
+
+  it('Search by valid input fields and insufficient corresponding search fields; return some output fields; format as json') do
+    response = TestHttp.get('/author,title/Dowson/title.json')
+    expect(response.body).to include('405')
+    expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
+    expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
 end
