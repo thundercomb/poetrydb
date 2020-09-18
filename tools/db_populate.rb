@@ -6,11 +6,11 @@ include Mongo
 
 json_inputfile = ARGV[0]
 mongo_uri = ENV['MONGODB_URI']
-username = ENV['USER']
-password = ENV['PASS']
+db_username = ENV['MONGODB_USER']
+db_password = ENV['MONGODB_PASS']
 
 db_name = mongo_uri[%r{/([^/\?]+)(\?|$)}, 1]
-client = Mongo::Client.new(mongo_uri, :database => db_name, :user => username, :password => password)
+client = Mongo::Client.new(mongo_uri, :database => db_name, :user => db_username, :password => db_password)
 db = client.database
 
 coll = db.collection("poetry")
