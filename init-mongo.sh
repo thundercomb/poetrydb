@@ -1,4 +1,6 @@
 #!/usr/bin/env bash
+# https://gist.github.com/x-yuri/22eace6d6d047cbe090e1412eaabc97b
+
 set -eu
 mongo -- "$MONGO_DB" <<EOF
     var rootUser = '$MONGO_INITDB_ROOT_USERNAME';
