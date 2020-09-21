@@ -3,15 +3,24 @@ services:
   mongo:
     image: mongo
     container_name: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_DB=test
+      - MONGO_DB_USER=test
+      - MONGO_DB_PASS=test
     ports:
       - "27017:27017"
     volumes:
       - ./mongo-volume:/data/db
+      - ./init-mongo.sh:/docker-entrypoint-initdb.d/init-mongo.sh
   poetrydb:
     build: .
     container_name: poetrydb
     environment:
       - MONGODB_URI=mongodb://mongo:27017/test
+      - MONGODB_USER=test
+      - MONGODB_PASS=test
     command: bash -c "ruby /poetrydb/tools/db_populate.rb /poetrydb/tools/test.json &&
                       bundle exec unicorn -p 3000 -c unicorn.rb"
     volumes:
