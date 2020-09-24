@@ -7,7 +7,7 @@ class Web < Sinatra::Base
 
     search_key = params[:key]
     if search_key == 'random'
-      @data = find_random()
+      @data = find_random(1)
     elsif ['author', 'authors', 'title', 'titles'].include? search_key
       @data = find_list(search_key.chomp('s'))
     else

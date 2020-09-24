@@ -16,9 +16,13 @@ class Web < Sinatra::Base
       randomcount = search_hash['random']
       search_hash.delete('random')
 
-      @findings_data = settings.poetry_coll.find(
-        search_hash, { :projection => output_fields }
-      ).to_a.sample(randomcount)
+      if search_hash == {}
+        find_random(randomcount, output_fields)
+      else
+        @findings_data = settings.poetry_coll.find(
+          search_hash, { :projection => output_fields }
+        ).to_a.sample(randomcount)
+      end
     # otherwise return all documents
     else
       @findings_data = settings.poetry_coll.find(
