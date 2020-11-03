@@ -2,7 +2,7 @@ GEM
   remote: https://rubygems.org/
   specs:
     bson (4.10.0)
-    json (2.2.0)
+    json (2.3.0)
     kgio (2.11.2)
     mongo (2.13.0)
       bson (>= 4.8.2, < 5.0.0)
