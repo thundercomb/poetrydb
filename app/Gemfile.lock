@@ -7,7 +7,7 @@ GEM
     mongo (2.13.0)
       bson (>= 4.8.2, < 5.0.0)
     mustermann (1.0.3)
-    rack (2.2.2)
+    rack (2.2.3)
     rack-protection (2.0.5)
       rack
     raindrops (0.19.0)
