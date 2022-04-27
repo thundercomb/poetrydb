@@ -17,7 +17,8 @@ class Web < Sinatra::Base
       elsif search_hash["#{key}"][-4..-1].eql? ':abs'
         search_hash["#{key}"] = search_hash["#{key}"][0..-5]
       else
-        search_hash["#{key}"] = /#{search_hash[key]}/i
+        search_value = search_hash[key].gsub("(","\\(").gsub(")","\\)")
+        search_hash["#{key}"] = /#{search_value}/i
       end
     end
     search_hash

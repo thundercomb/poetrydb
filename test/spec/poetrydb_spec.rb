@@ -860,4 +860,28 @@ describe('Search by invalid input field combinations:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
+  it('Search for title with open round bracket') do
+    response = TestHttp.get('/title/A%20Soap%20Opera%20(How')
+    expect(response.body).to include('There it was ) oh no')
+    expect(response.body).not_to include('And the Debate was done.')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('Search for lines with closing round bracket') do
+    response = TestHttp.get('/lines/There%20it%20was%20)%20oh%20no')
+    expect(response.body).to include('There it was ) oh no')
+    expect(response.body).not_to include('And the Debate was done.')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"author":')
+    expect(response.body).to include('"lines":')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
 end
