@@ -1132,6 +1132,7 @@ Result:
     "linecount": 18
   }
 ]
+```
 Format:
 ```
 /<input field>,<input field>,<input field>,<input field>/<search term>;<search term>;<search term>;<search term>
