@@ -91,9 +91,9 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: The title, or part of the title, of a poem  
   ```lines```: Part of a line or lines of a poem  
   ```linecount```: The number of lines of a poem, including section headings, but excluding empty lines (eg. section breaks)  
-  ```poemcount```: The number of poems to return (cannot be used in combination with `random`)
+  ```poemcount```: The number of poems to return (cannot be used in combination with `random`)  
   ```random```: The number of random poems to return (cannot be used in combination with `poemcount`)
-
+  
 * ```<search term>``` relates to ```<input field>```. When ```<input field>``` is:
 
   ```author```: ```<field data>``` is the name, or part of the name, of the author of a poem  
