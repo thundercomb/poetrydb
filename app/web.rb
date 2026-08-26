@@ -6,11 +6,24 @@ include Mongo
 
 class Web < Sinatra::Base
   configure do
-    mongo_uri = ENV['MONGODB_URI']
-    db_username = ENV['MONGODB_USER']
-    db_password = ENV['MONGODB_PASS']
-    db_name = mongo_uri[%r{/([^/\?]+)(\?|$)}, 1]
-    client = Mongo::Client.new(mongo_uri, :database => db_name, :user => db_username, :password => db_password)
+    # Accept the connection string under any of the common env var names
+    mongo_uri = ENV['MONGODB_URI'] || ENV['MONGO_URI'] || ENV['MONGO_URL'] ||
+                ENV['MONGOLAB_URI'] || ENV['MONGOHQ_URL']
+
+    if mongo_uri.nil? || mongo_uri.empty?
+      raise 'MongoDB connection string not found. Please set MONGODB_URI ' \
+            '(or MONGO_URI, MONGO_URL, MONGOLAB_URI, MONGOHQ_URL).'
+    end
+
+    # Let the driver parse the URI (including the database name); only pass
+    # credentials if they are supplied out of band via env vars
+    options = {}
+    options[:user] = ENV['MONGODB_USER'] if ENV['MONGODB_USER']
+    options[:password] = ENV['MONGODB_PASS'] if ENV['MONGODB_PASS']
+
+    client = Mongo::Client.new(mongo_uri, options)
+    # Allow the database to be overridden explicitly
+    client = client.use(ENV['MONGO_DATABASE']) if ENV['MONGO_DATABASE']
     db = client.database
 
     set :root, File.dirname(__FILE__)
