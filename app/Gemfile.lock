@@ -1,37 +1,57 @@
 GEM
   remote: https://rubygems.org/
   specs:
-    bson (4.10.0)
-    json (2.2.0)
-    kgio (2.11.2)
-    mongo (2.13.0)
-      bson (>= 4.8.2, < 5.0.0)
-    mustermann (1.0.3)
-    rack (2.2.2)
-    rack-protection (2.0.5)
-      rack
-    raindrops (0.19.0)
-    sinatra (2.0.5)
-      mustermann (~> 1.0)
-      rack (~> 2.0)
-      rack-protection (= 2.0.5)
+    base64 (0.3.0)
+    bson (5.2.0)
+    json (2.21.2)
+    kgio (2.11.4)
+    mongo (2.25.0)
+      base64
+      bson (>= 4.14.1, < 6.0.0)
+    mustermann (3.1.1)
+    rack (2.2.24)
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
+    raindrops (0.20.1)
+    sinatra (3.2.0)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.2.0)
       tilt (~> 2.0)
-    tilt (2.0.9)
-    unicorn (5.4.1)
+    tilt (2.9.0)
+    unicorn (6.1.0)
       kgio (~> 2.6)
       raindrops (~> 0.7)
 
 PLATFORMS
+  aarch64-linux
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   json
-  mongo (= 2.13.0)
-  sinatra (= 2.0.5)
-  unicorn
+  mongo (~> 2.21)
+  sinatra (~> 3.2)
+  unicorn (~> 6.1)
+
+CHECKSUMS
+  base64 (0.3.0) sha256=27337aeabad6ffae05c265c450490628ef3ebd4b67be58257393227588f5a97b
+  bson (5.2.0) sha256=c468c1e8a3cfa1e80531cc519a890f85586986721d8e305f83465cc36bb82608
+  bundler (4.0.19) sha256=b48056e4c77fb3853cc47775b5447ede44aaa4f53c32f168014ab4fe86587d47
+  json (2.21.2) sha256=1f1d3b7cf2b3ba1a69beca0bb6db13d5438b80bff3cd54cdaaa620b9b07c1c6a
+  kgio (2.11.4) sha256=bda7a2146115998a5b07154e708e0ac02c38dcee7e793c33e2e14f600fdfffc6
+  mongo (2.25.0) sha256=b4663884d23523d24f50c579846956444410f939093e8c2a95fa4b76bb929053
+  mustermann (3.1.1) sha256=4c6170c7234d5499c345562ba7c7dfe73e1754286dcc1abb053064d66a127198
+  rack (2.2.24) sha256=ef16526a0d871c43753452338c754040a664c8b41bf0dd7450b85f7772adca5f
+  rack-protection (3.2.0) sha256=3c74ba7fc59066453d61af9bcba5b6fe7a9b3dab6f445418d3b391d5ea8efbff
+  raindrops (0.20.1) sha256=aa0eb9ff6834f2d9e232ba688bd49cb30be893bc5a3452e74722c94c1fab4730
+  sinatra (3.2.0) sha256=6e727f4d034e87067d9aab37f328021d7c16722ffd293ef07b6e968915109807
+  tilt (2.9.0) sha256=da5735d0280bba96e9a91041bb14aee435ccad5c17b0fa519249ae543d9aa3a5
+  unicorn (6.1.0) sha256=45dd987add4c2b084c1880a68373af42797a704ad7441faff9b14b4982aa0fc0
 
 RUBY VERSION
-   ruby 2.6.0p0
+  ruby 3.3.9
 
 BUNDLED WITH
-   1.17.2
+  4.0.19
