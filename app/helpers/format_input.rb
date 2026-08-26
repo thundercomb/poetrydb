@@ -8,9 +8,21 @@ class Web < Sinatra::Base
       if search_hash["#{key}"] == nil
         raise "405"
       elsif key == 'linecount'
-        # linecount is a string field in the database
-        # use cast to integer and back as trick to drop modifiers like ':abs'
-        search_hash["#{key}"] = search_hash["#{key}"].to_i.to_s
+        value = search_hash["#{key}"]
+        range = value.match(/\A(\d*)-(\d*)\z/)
+        if range and not (range[1].empty? and range[2].empty?)
+          # Range query: "14-20" (14..20), "-14" (<= 14), "14-" (>= 14).
+          # linecount is stored as a string, so compare numerically via $toInt.
+          bounds = []
+          bounds << { '$gte' => [{ '$toInt' => '$linecount' }, range[1].to_i] } unless range[1].empty?
+          bounds << { '$lte' => [{ '$toInt' => '$linecount' }, range[2].to_i] } unless range[2].empty?
+          search_hash.delete("#{key}")
+          (search_hash['$and'] ||= []) << { '$expr' => { '$and' => bounds } }
+        else
+          # linecount is a string field in the database
+          # use cast to integer and back as trick to drop modifiers like ':abs'
+          search_hash["#{key}"] = value.to_i.to_s
+        end
       elsif key == 'poemcount' or key == 'random'
         # poemcount should be an integer - cast drops modifiers like ':abs'
         search_hash["#{key}"] = search_hash["#{key}"].to_i

@@ -547,7 +547,15 @@ linecount
 /linecount/<linecount>[/<output field>][,<output field>][..][.<format>]
 ```
 
-Note: linecount is always exact, and therefore the match type ```:abs``` has no effect.
+Note: a plain ```<linecount>``` is an exact match, so the match type ```:abs``` has no effect.
+
+<b>Ranges:</b> ```<linecount>``` may also be a numeric range, matched inclusively:
+
+  ```14-20```: poems with between 14 and 20 lines
+  ```-14```: poems with at most 14 lines (maximum)
+  ```14-```: poems with at least 14 lines (minimum)
+
+For example, ```/linecount/-14``` returns every poem with 14 or fewer lines, and ```/linecount,random/-14;5``` returns 5 random poems no longer than 14 lines.
 
 Format:
 ```
