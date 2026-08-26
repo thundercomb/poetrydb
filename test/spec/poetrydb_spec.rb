@@ -290,6 +290,51 @@ describe('Linecount search:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
+  it('Search by maximum linecount (open-ended range)') do
+    response = TestHttp.get('/linecount/-9')
+    # <= 9 lines: numeric comparison, not lexical ("12"/"16" must be excluded)
+    expect(response.body).to include('Said Death to Passion')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('Search by minimum linecount (open-ended range)') do
+    response = TestHttp.get('/linecount/12-')
+    # >= 12 lines
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.body).not_to include('Said Death to Passion')
+    expect(response.code).to be 200
+  end
+
+  it('Search by linecount range (both bounds)') do
+    response = TestHttp.get('/linecount/9-12')
+    # 9..12 lines inclusive
+    expect(response.body).to include('Said Death to Passion')
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it('Exact linecount still matches (no range)') do
+    response = TestHttp.get('/linecount/12')
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.body).not_to include('Said Death to Passion')
+    expect(response.code).to be 200
+  end
+
+  it('Combine maximum linecount with random') do
+    response = TestHttp.get('/linecount,random/-9;5')
+    # only poems with <= 9 lines are eligible for the random sample
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
   it('Search by linecount; return some output fields; format as text') do
     response = TestHttp.get('/linecount/16/title,lines,author.text')
     expect(response.body).to include('The Moon Maiden\'s Song')
