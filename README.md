@@ -799,12 +799,23 @@ Emily Dickinson
 
 <b>General Format:</b>
 ```
-/random[/<random count>][/<output field>][,<output field>][..][.<format>]
+/random[/<random count>][:author][/<output field>][,<output field>][..][.<format>]
 ```
 
 Note:
 - the random count search field is always exact, and therefore the match type ```:abs``` has no effect
 - random and poemcount cannot be used together, as both specify the number of poems to return
+- the ```:author``` modifier makes the selection uniform across authors: it returns one poem each for ```<random count>``` randomly chosen authors, so prolific poets are no more likely to appear than poets with a single poem. (By default ```/random``` is uniform across poems, so authors with more poems appear more often.) If ```<random count>``` exceeds the number of matching authors, one poem for every matching author is returned.
+
+<b>Format (uniform across authors):</b>
+```
+/random/<random count>:author
+```
+Example:
+```
+/random/3:author
+```
+This returns 3 poems, each by a different, randomly chosen author. It composes with other input fields too, eg. ```/linecount,random/-14;3:author``` returns 3 poems no longer than 14 lines, each by a different author.
 
 Format:
 ```

@@ -548,6 +548,38 @@ describe('Random search:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
+  it('Random by author returns one poem per distinct author') do
+    response = TestHttp.get('/random/10:author')
+    authors = response.parsed_response.map { |p| p['author'] }
+    # test corpus has 3 authors (Emily Dickinson has 2 poems); author-uniform
+    # collapses her to one, so exactly 3 poems come back, no author repeated
+    expect(response.parsed_response.length).to eq 3
+    expect(authors.uniq.length).to eq 3
+    expect(authors.sort).to eq ['Bob Willett', 'Emily Dickinson', 'Ernest Dowson']
+    expect(response.code).to be 200
+  end
+
+  it('Random by author with count below the number of authors') do
+    response = TestHttp.get('/random/2:author')
+    authors = response.parsed_response.map { |p| p['author'] }
+    expect(response.parsed_response.length).to eq 2
+    expect(authors.uniq.length).to eq 2   # still one poem per distinct author
+    expect(response.code).to be 200
+  end
+
+  it('Random by author composes with a linecount filter') do
+    response = TestHttp.get('/linecount,random/-9;10:author')
+    authors = response.parsed_response.map { |p| p['author'] }
+    titles = response.parsed_response.map { |p| p['title'] }
+    # <= 9 lines eligible: 'Said Death to Passion' (Dickinson, 9) and the 1-line Bob Willett poem
+    expect(response.parsed_response.length).to eq 2
+    expect(authors.sort).to eq ['Bob Willett', 'Emily Dickinson']
+    expect(titles).to include('Said Death to Passion')                 # Dickinson's only <= 9 poem
+    expect(titles).not_to include('Bereavement in their death to feel') # her 12-line poem
+    expect(response.body).not_to include('The Moon Maiden\'s Song')     # Dowson, 16 lines
+    expect(response.code).to be 200
+  end
+
 end
 
 describe('Combination search:', {:type => :feature}) do

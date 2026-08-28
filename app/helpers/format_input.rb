@@ -23,7 +23,15 @@ class Web < Sinatra::Base
           # use cast to integer and back as trick to drop modifiers like ':abs'
           search_hash["#{key}"] = value.to_i.to_s
         end
-      elsif key == 'poemcount' or key == 'random'
+      elsif key == 'random'
+        value = search_hash["#{key}"]
+        # optional axis modifier: "5:author" => 5 poems, each by a random author
+        if value.end_with?(':author')
+          search_hash['random_axis'] = 'author'
+          value = value[0...-':author'.length]
+        end
+        search_hash["#{key}"] = value.to_i
+      elsif key == 'poemcount'
         # poemcount should be an integer - cast drops modifiers like ':abs'
         search_hash["#{key}"] = search_hash["#{key}"].to_i
       elsif search_hash["#{key}"][-4..-1].eql? ':abs'
