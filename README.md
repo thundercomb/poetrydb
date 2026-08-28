@@ -107,7 +107,8 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
 
 * ```[:<search type>]``` is optional. It can be:
 
-  ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```  
+  ```:abs```: Match ```<search term>``` exactly (the whole field) when searching ```<input field>```  
+  ```:word```: Match ```<search term>``` as a whole word within ```<input field>``` (eg. ```eleven``` matches "eleven" but not "eleventh")  
   ```Default (empty)```: match ```<search term>``` with any part of ```<input field>``` when searching  
 
 * ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:  

@@ -54,11 +54,15 @@ class Web < Sinatra::Base
   end
 
   # Build the MongoDB match value for a free-text field (author/title/lines).
-  # ":abs" means an exact, whole-field match; otherwise the term matches any
+  # ":abs" means an exact, whole-field match; ":word" matches the term as a
+  # whole word ("eleven" but not "eleventh"); otherwise the term matches any
   # part of the field (case-insensitive substring).
   def search_regex(value)
     if value.end_with?(':abs')
       value[0...-':abs'.length]
+    elsif value.end_with?(':word')
+      word = value[0...-':word'.length].gsub("(", "\\(").gsub(")", "\\)")
+      /\b#{word}\b/i
     else
       escaped = value.gsub("(", "\\(").gsub(")", "\\)")
       /#{escaped}/i

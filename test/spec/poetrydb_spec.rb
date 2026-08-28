@@ -1027,3 +1027,36 @@ describe('Union search (single term across multiple fields):', {:type => :featur
   end
 
 end
+
+describe('Exact word search (:word modifier):', {:type => :feature}) do
+
+  it('Default (substring) matches a partial word') do
+    response = TestHttp.get('/lines/win')
+    # "win" appears inside "winged" in "The Moon Maiden's Song"
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word excludes partial-word matches') do
+    response = TestHttp.get('/lines/win:word')
+    # no line contains "win" as a whole word, so nothing matches
+    expect(response.body).to include('404')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word still matches a genuine whole word') do
+    response = TestHttp.get('/lines/summer:word')
+    # "summer" appears as a whole word ("summer night")
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word composes with a union search') do
+    response = TestHttp.get('/title,lines/summer:word')
+    # union across title/lines, whole-word "summer" only in the lines
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+end
