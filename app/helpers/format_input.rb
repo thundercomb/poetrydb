@@ -3,7 +3,19 @@ require 'sinatra'
 class Web < Sinatra::Base
 
   def format_input(search_keys, search_terms)
-    search_hash = Hash[search_keys.split(',').zip(search_terms.split(';'))]
+    keys = search_keys.split(',')
+    terms = search_terms.split(';')
+
+    # Union (OR) search: several input fields but a single search term means
+    # "match this term in ANY of the given fields", eg. /title,lines/roland
+    # is the union of /title/roland and /lines/roland. Restricted to the
+    # free-text fields; the other fields have no meaningful union.
+    if keys.length > 1 and terms.length == 1
+      raise "405" unless (keys - ['author', 'title', 'lines']).empty?
+      return { '$or' => keys.map { |key| { key => search_regex(terms.first) } } }
+    end
+
+    search_hash = Hash[keys.zip(terms)]
     search_hash.keys.each do |key|
       if search_hash["#{key}"] == nil
         raise "405"
@@ -34,14 +46,27 @@ class Web < Sinatra::Base
       elsif key == 'poemcount'
         # poemcount should be an integer - cast drops modifiers like ':abs'
         search_hash["#{key}"] = search_hash["#{key}"].to_i
-      elsif search_hash["#{key}"][-4..-1].eql? ':abs'
-        search_hash["#{key}"] = search_hash["#{key}"][0..-5]
       else
-        search_value = search_hash[key].gsub("(","\\(").gsub(")","\\)")
-        search_hash["#{key}"] = /#{search_value}/i
+        search_hash["#{key}"] = search_regex(search_hash["#{key}"])
       end
     end
     search_hash
+  end
+
+  # Build the MongoDB match value for a free-text field (author/title/lines).
+  # ":abs" means an exact, whole-field match; ":word" matches the term as a
+  # whole word ("eleven" but not "eleventh"); otherwise the term matches any
+  # part of the field (case-insensitive substring).
+  def search_regex(value)
+    if value.end_with?(':abs')
+      value[0...-':abs'.length]
+    elsif value.end_with?(':word')
+      word = value[0...-':word'.length].gsub("(", "\\(").gsub(")", "\\)")
+      /\b#{word}\b/i
+    else
+      escaped = value.gsub("(", "\\(").gsub(")", "\\)")
+      /#{escaped}/i
+    end
   end
 
 end

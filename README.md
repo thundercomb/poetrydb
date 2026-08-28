@@ -103,9 +103,12 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```poemcount```: ```<field data>``` is the number of poems to return  
   ```random```: ```<field data>``` is the number of random poems to return
 
+* When several ```<input field>```s are supplied but only a single ```<search term>```, the term is matched as a **union** (OR) across those fields. For example ```/title,lines/roland``` returns poems where ```roland``` appears in the title *or* the lines — the union of ```/title/roland``` and ```/lines/roland```. Union search applies to the ```author```, ```title``` and ```lines``` fields. (When the number of search terms equals the number of input fields, the fields are combined as an intersection/AND, as before.)
+
 * ```[:<search type>]``` is optional. It can be:
 
-  ```:abs```: Match ```<search term>``` exactly when searching ```<input field>```  
+  ```:abs```: Match ```<search term>``` exactly (the whole field) when searching ```<input field>```  
+  ```:word```: Match ```<search term>``` as a whole word within ```<input field>``` (eg. ```eleven``` matches "eleven" but not "eleventh")  
   ```Default (empty)```: match ```<search term>``` with any part of ```<input field>``` when searching  
 
 * ```[/<output field>][,<output field>][..]``` are optional. They are a comma delimited set that can be any combination of:  

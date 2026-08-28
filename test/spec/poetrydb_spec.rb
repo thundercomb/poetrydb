@@ -858,19 +858,20 @@ describe('Search with invalid output fields:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
-  it('Search by valid input fields and insufficient corresponding search fields') do
+  it('Union search: one term across multiple fields matches via author') do
     response = TestHttp.get('/author,title/Dowson')
-    expect(response.body).to include('405')
-    expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
-    expect(response.body).not_to include('"title":')
+    # author,title with a single term => union: author~Dowson OR title~Dowson
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.body).to include('Ernest Dowson')
+    expect(response.body).not_to include('Comma delimited fields must have corresponding')
     expect(response.code).to be 200
   end
 
-  it('Search by valid input fields and insufficient corresponding search fields; return all output fields; format as json') do
+  it('Union search: one term across multiple fields; return all output fields; format as json') do
     response = TestHttp.get('/author,title/Dowson/all.json')
-    expect(response.body).to include('405')
-    expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
-    expect(response.body).not_to include('"title":')
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.body).to include('"linecount":')
+    expect(response.body).not_to include('Comma delimited fields must have corresponding')
     expect(response.code).to be 200
   end
 
@@ -929,11 +930,19 @@ describe('Search by invalid input field combinations:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 
-  it('Search by valid input fields and insufficient corresponding search fields; return some output fields; format as json') do
-    response = TestHttp.get('/author,title/Dowson/title.json')
+  it('Search by valid input fields and genuinely mismatched search terms') do
+    response = TestHttp.get('/author,title,lines/Dowson;Death')
+    # 3 fields but 2 terms is a real mismatch (neither AND nor union), so still 405
     expect(response.body).to include('405')
     expect(response.body).to include('Comma delimited fields must have corresponding semicolon delimited search terms')
     expect(response.body).not_to include('"title":')
+    expect(response.code).to be 200
+  end
+
+  it('Union search rejected for non-text input fields') do
+    response = TestHttp.get('/linecount,title/5')
+    # union only applies to author/title/lines; linecount has no meaningful union
+    expect(response.body).to include('405')
     expect(response.code).to be 200
   end
 
@@ -958,6 +967,95 @@ describe('Search by invalid input field combinations:', {:type => :feature}) do
     expect(response.body).to include('"author":')
     expect(response.body).to include('"lines":')
     expect(response.body).to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+end
+
+describe('Union search (single term across multiple fields):', {:type => :feature}) do
+
+  it('Union reaches the lines field (reporter scenario: term in any field)') do
+    response = TestHttp.get('/author,title,lines/summer')
+    # 'summer' is only in the lines of "The Moon Maiden's Song"
+    expect(response.parsed_response.length).to eq 1
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.code).to be 200
+  end
+
+  it('Union returns all poems matching in any field') do
+    response = TestHttp.get('/author,lines/Dickinson')
+    # author~Dickinson matches both of her poems (lines contain no "Dickinson")
+    authors = response.parsed_response.map { |p| p['author'] }
+    titles = response.parsed_response.map { |p| p['title'] }
+    expect(response.parsed_response.length).to eq 2
+    expect(authors.uniq).to eq ['Emily Dickinson']
+    expect(titles).to include('Bereavement in their death to feel')
+    expect(titles).to include('Said Death to Passion')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it('Union honours the :abs modifier (exact match in any field)') do
+    # exact author "Ernest Dowson" matches; a partial "Dowson:abs" matches nothing
+    exact = TestHttp.get('/author,title/Ernest%20Dowson:abs')
+    expect(exact.body).to include('The Moon Maiden\'s Song')
+    expect(exact.code).to be 200
+
+    partial = TestHttp.get('/author,title/Dowson:abs')
+    expect(partial.body).to include('404')
+    expect(partial.body).not_to include('The Moon Maiden\'s Song')
+    expect(partial.code).to be 200
+  end
+
+  it('Intersection still works: multiple fields with matching terms are ANDed') do
+    response = TestHttp.get('/author,title/Dickinson;Passion')
+    # author~Dickinson AND title~Passion => only "Said Death to Passion"
+    expect(response.parsed_response.length).to eq 1
+    expect(response.body).to include('Said Death to Passion')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.code).to be 200
+  end
+
+  it('Intersection across title and lines with different terms') do
+    response = TestHttp.get('/title,lines/Death;Passion')
+    # title~Death AND lines~Passion => only "Said Death to Passion"
+    expect(response.parsed_response.length).to eq 1
+    expect(response.body).to include('Said Death to Passion')
+    expect(response.body).not_to include('Bereavement in their death to feel')
+    expect(response.code).to be 200
+  end
+
+end
+
+describe('Exact word search (:word modifier):', {:type => :feature}) do
+
+  it('Default (substring) matches a partial word') do
+    response = TestHttp.get('/lines/win')
+    # "win" appears inside "winged" in "The Moon Maiden's Song"
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word excludes partial-word matches') do
+    response = TestHttp.get('/lines/win:word')
+    # no line contains "win" as a whole word, so nothing matches
+    expect(response.body).to include('404')
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word still matches a genuine whole word') do
+    response = TestHttp.get('/lines/summer:word')
+    # "summer" appears as a whole word ("summer night")
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it(':word composes with a union search') do
+    response = TestHttp.get('/title,lines/summer:word')
+    # union across title/lines, whole-word "summer" only in the lines
+    expect(response.body).to include('The Moon Maiden\'s Song')
     expect(response.code).to be 200
   end
 
