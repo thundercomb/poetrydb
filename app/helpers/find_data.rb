@@ -15,8 +15,9 @@ class Web < Sinatra::Base
     elsif search_hash.keys.include?('random')
       randomcount = search_hash['random']
       search_hash.delete('random')
+      random_axis = search_hash.delete('random_axis')
 
-      @findings_data = find_random(randomcount, search_hash, output_fields)
+      @findings_data = find_random(randomcount, search_hash, output_fields, random_axis)
     # otherwise return all documents
     else
       @findings_data = settings.poetry_coll.find(
