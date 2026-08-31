@@ -75,7 +75,7 @@ Unless thou take that honour from thy name:
 
 The API is written in Ruby and uses Sinatra to resolve API routes. The poetry data is stored in a MongoDB database. The Ruby code is provided here as Open Source. The PoetryDB database is not directly accessible, in order to preserve its integrity.
 
-![Architecture Diagram](https://github.com/thundercomb/poetrydb/blob/master/Architecture_Diagram.jpg)
+![Architecture Diagram](https://github.com/thundercomb/poetrydb/blob/main/Architecture_Diagram.jpg)
 
 ## API Reference
 
@@ -1244,4 +1244,4 @@ Let me know of any documentation, bugs, or missing features you would like to se
 
 ## License
 
-To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](https://github.com/thundercomb/poetrydb/blob/master/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
+To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](https://github.com/thundercomb/poetrydb/blob/main/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
