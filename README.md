@@ -810,16 +810,6 @@ Note:
 - random and poemcount cannot be used together, as both specify the number of poems to return
 - the ```:author``` modifier makes the selection uniform across authors: it returns one poem each for ```<random count>``` randomly chosen authors, so prolific poets are no more likely to appear than poets with a single poem. (By default ```/random``` is uniform across poems, so authors with more poems appear more often.) If ```<random count>``` exceeds the number of matching authors, one poem for every matching author is returned.
 
-<b>Format (uniform across authors):</b>
-```
-/random/<random count>:author
-```
-Example:
-```
-/random/3:author
-```
-This returns 3 poems, each by a different, randomly chosen author. It composes with other input fields too, eg. ```/linecount,random/-14;3:author``` returns 3 poems no longer than 14 lines, each by a different author.
-
 Format:
 ```
 /random
@@ -915,6 +905,62 @@ Result:
 
 Format:
 ```
+/random/<random count>:author
+```
+Example:
+```
+/random/3:author
+```
+Result:
+```
+[
+  {
+    "title": "The Progress of Poesy",
+    "author": "Thomas Gray",
+    "lines": [
+      "A Pindaric Ode",
+      "",
+      "Awake, Aeolian lyre, awake,",
+      "And give to rapture all thy trembling strings.",
+.
+.
+.
+    ],
+    "linecount": "124"
+  },
+  {
+    "title": "On a Soldier Fallen in the Philippines",
+    "author": "William Vaughn Moody",
+    "lines": [
+      "Streets of the roaring town,",
+      "Hush for him, hus, be still!",
+      "He comes, who was stricken down",
+      "Doing the word of our will.",
+.
+.
+.
+    ],
+    "linecount": "30"
+  },
+  {
+    "title": "There Was a Time",
+    "author": "Edward Thomas",
+    "lines": [
+      "THERE was a time when this poor frame was whole",
+      "And I had youth and never another care,",
+      "Or none that should have troubled a strong soul.",
+      "Yet, except sometimes in a frosty air",
+.
+.
+.
+    ],
+    "linecount": "18"
+  }
+]
+```
+
+Format:
+```
 /random/<random count>/<output field>
 ```
 Example:
@@ -999,8 +1045,50 @@ Robinson
 ```
 
 Notes:
-1. The number of input fields should always be matched by the number of search terms
+1. When the number of search terms matches the number of input fields, the fields are combined as an intersection (AND): a poem must match on every field. When a single search term is supplied for several input fields, it is instead treated as a union (OR): a poem matches if the term is found in any of the fields. Union search currently applies to the ```author```, ```title``` and ```lines``` fields only (it can be extended to other fields if useful); ```linecount```, ```poemcount``` and ```random``` are not supported for union and return a 405 error.
 2. The search terms are separated by the semicolon to allow commas to be used in search terms. However, semicolons are a feature of many texts, and unfortunately cannot be part of the search term currently.
+
+Format:
+```
+/<input field>,<input field>/<search term>
+```
+Example:
+```
+/title,lines/roland
+```
+Result:
+```
+[
+  {
+    "title": "Childe Roland to the Dark Tower Came",
+    "author": "Robert Browning",
+    "lines": [
+      "My first thought was, he lied in every word,",
+      "  That hoary cripple, with malicious eye",
+      "  Askance to watch the working of his lie",
+      "On mine, and mouth scarce able to afford",
+.
+.
+.
+    ],
+    "linecount": "204"
+  },
+  {
+    "title": "Christabel",
+    "author": "Samuel Coleridge",
+    "lines": [
+      "PART I",
+      "'Tis the middle of night by the castle clock",
+      "And the owls have awakened the crowing cock;",
+      "Tu-whit!- Tu-whoo!",
+.
+.
+.
+    ],
+    "linecount": "689"
+  }
+]
+```
 
 Format:
 ```
@@ -1058,7 +1146,6 @@ Result:
 ]
 ```
 
-@@@@
 Format:
 ```
 /<input field>,<input field>,<input field>/<search term>;<search term>;<search term>
