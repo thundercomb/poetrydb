@@ -1376,8 +1376,14 @@ Winter
 
 ## Contact
 
-Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, on Twitter @po3db
+Let me know of any documentation, bugs, or missing features you would like to see, or just come and say hi, via [GitHub issues](https://github.com/thundercomb/poetrydb/issues).
 
 ## License
 
-To protect the openness of this endeavour the software is released under the terms of the [GNU Public License v2](https://github.com/thundercomb/poetrydb/blob/main/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
+PoetryDB has two licenses, because the code and the data are different things.
+
+**The software** is released under the terms of the [GNU Public License v2](https://github.com/thundercomb/poetrydb/blob/main/LICENSE.txt). In essence it allows you to reuse and modify this software, as long as the resulting program(s) remain open and licensed in the same way.
+
+**The data** is released under the [Creative Commons Attribution 4.0 International License (CC BY 4.0)](https://creativecommons.org/licenses/by/4.0/) — see [`DATA_LICENSE.md`](https://github.com/thundercomb/poetrydb/blob/main/DATA_LICENSE.md). The poem *texts* are public domain (sourced from Project Gutenberg and similar public-domain archives), but the curated **edition and database** — the selection, editorial corrections, standardised titles, biographies, structuring, and the collection as a whole — represent real editorial work. You are warmly welcome to reuse it; all that is asked in return is **attribution**:
+
+> Poetry data from **PoetryDB** (https://poetrydb.org), licensed under CC BY 4.0.
