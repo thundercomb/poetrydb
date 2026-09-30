@@ -2,7 +2,7 @@ require 'sinatra'
 
 class Web < Sinatra::Base
 
-  def find_data(search_hash, output_fields = { '_id' => 0, 'title' => 1, 'author' => 1, 'lines' => 1, 'linecount' => 1 })
+  def find_data(search_hash, output_fields = { '_id' => 0, 'title' => 1, 'author' => 1, 'lines' => 1, 'linecount' => 1, 'source' => 1 })
     # limit returned documents if 'poemcount' key available
     if search_hash.keys.include?('poemcount')
       poemcount = search_hash['poemcount']

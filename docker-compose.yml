@@ -22,6 +22,7 @@ services:
       - MONGODB_USER=test
       - MONGODB_PASS=test
     command: bash -c "ruby /poetrydb/tools/db_populate.rb /poetrydb/tools/test.json &&
+                      ruby /poetrydb/tools/db_populate_authors.rb /poetrydb/tools/test_authors.json &&
                       bundle exec unicorn -p 3000 -c unicorn.rb"
     volumes:
       - ./:/poetrydb

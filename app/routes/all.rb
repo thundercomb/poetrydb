@@ -119,9 +119,9 @@ class Web < Sinatra::Base
     # Unset _id field and enable the others
     output_fields['_id'] = 0
     params[:fields].split('.')[0].split(',').each do |field|
-      unless ['author', 'title', 'lines', 'linecount'].include? field
+      unless ['author', 'title', 'lines', 'linecount', 'source'].include? field
         return json_status(
-          '405',"#{field} output field not available. Only author, title, lines, and linecount allowed."
+          '405',"#{field} output field not available. Only author, title, lines, linecount, and source allowed."
         )
       end
       output_fields["#{field}"] = 1

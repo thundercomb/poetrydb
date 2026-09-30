@@ -1142,3 +1142,73 @@ describe 'Author info endpoint' do
     expect(response.code).to be 200
   end
 end
+
+# The `source` output field carries per-poem provenance (edition + URL). It is
+# part of the default response (like linecount) AND explicitly selectable, but
+# only appears for poems that actually record a source. In the fixture, "Said
+# Death to Passion" (Gutenberg 12242) and "The Moon Maiden's Song" (Gutenberg
+# 8109) have a source; "Bereavement in their death to feel" does not.
+describe('Source output field:', {:type => :feature}) do
+
+  it('is present by default for a poem that records a source (json)') do
+    response = TestHttp.get('/author/Dowson')
+    expect(response.body).to include('"source":')
+    expect(response.body).to include('https://www.gutenberg.org/ebooks/8109')
+    expect(response.code).to be 200
+  end
+
+  it('is omitted by default for a poem with no recorded source') do
+    response = TestHttp.get('/title/Bereavement%20in%20their%20death%20to%20feel')
+    expect(response.body).to include('"title":')
+    expect(response.body).not_to include('"source":')
+    expect(response.code).to be 200
+  end
+
+  it('is included in the /all response') do
+    response = TestHttp.get('/title/Said%20Death%20to%20Passion:abs/all')
+    expect(response.body).to include('"source":')
+    expect(response.body).to include('https://www.gutenberg.org/ebooks/12242')
+    expect(response.code).to be 200
+  end
+
+  it('can be requested on its own as an output field') do
+    response = TestHttp.get('/author/Dowson/source')
+    expect(response.body).to include('"source":')
+    expect(response.body).to include('https://www.gutenberg.org/ebooks/8109')
+    expect(response.body).not_to include('"title":')
+    expect(response.body).not_to include('"author":')
+    expect(response.body).not_to include('"lines":')
+    expect(response.body).not_to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('can be combined with other output fields') do
+    response = TestHttp.get('/title/Said%20Death%20to%20Passion:abs/title,source')
+    expect(response.body).to include('"title":')
+    expect(response.body).to include('"source":')
+    expect(response.body).not_to include('"lines":')
+    expect(response.body).not_to include('"linecount":')
+    expect(response.code).to be 200
+  end
+
+  it('when explicitly requested, is absent for a poem with no source') do
+    response = TestHttp.get('/title/Bereavement%20in%20their%20death%20to%20feel/title,source')
+    expect(response.body).to include('"title":')
+    expect(response.body).not_to include('"source":')
+    expect(response.code).to be 200
+  end
+
+  it('renders in the text format') do
+    response = TestHttp.get('/author/Dowson/source.text')
+    expect(response.body).to include("source\n")
+    expect(response.body).to include('https://www.gutenberg.org/ebooks/8109')
+    expect(response.code).to be 200
+  end
+
+  it('is still rejected as an INPUT (search) field') do
+    response = TestHttp.get('/source/Gutenberg')
+    expect(response.body).to include('405')
+    expect(response.body).to include('input field not available')
+    expect(response.code).to be 200
+  end
+end

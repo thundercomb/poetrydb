@@ -117,8 +117,9 @@ The API is written in Ruby and uses Sinatra to resolve API routes. The poetry da
   ```title```: Return only the title of each of the matching poems  
   ```lines```: Return only the lines of each of the matching poems  
   ```linecount```: Return only the number of lines of each of the matching poems  
+  ```source```: Return only the source of each of the matching poems — the edition the text was taken from (name and URL, eg. a Project Gutenberg ebook). Only present for poems whose provenance has been recorded  
   ```author,title,...```: Return each output field in the comma delimited list of each of the matching poems  
-  ```Default (empty)```: Return all data of each of the matching poems  
+  ```Default (empty)```: Return all data of each of the matching poems (including ```source``` where recorded)  
 
   or:  
 
