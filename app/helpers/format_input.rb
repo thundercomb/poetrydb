@@ -57,15 +57,20 @@ class Web < Sinatra::Base
   # ":abs" means an exact, whole-field match; ":word" matches the term as a
   # whole word ("eleven" but not "eleventh"); otherwise the term matches any
   # part of the field (case-insensitive substring).
+  #
+  # The search term is user input that gets interpolated into a Ruby regex, so
+  # every metacharacter is escaped with Regexp.escape. The README promises plain
+  # substring matching, so a literal "*" or "$" is the documented behaviour; not
+  # escaping them let invalid patterns (eg. "*") raise (500, issue #67) and
+  # match-everything anchors (eg. "$") return the whole corpus (503, issue #68).
   def search_regex(value)
     if value.end_with?(':abs')
       value[0...-':abs'.length]
     elsif value.end_with?(':word')
-      word = value[0...-':word'.length].gsub("(", "\\(").gsub(")", "\\)")
+      word = Regexp.escape(value[0...-':word'.length])
       /\b#{word}\b/i
     else
-      escaped = value.gsub("(", "\\(").gsub(")", "\\)")
-      /#{escaped}/i
+      /#{Regexp.escape(value)}/i
     end
   end
 

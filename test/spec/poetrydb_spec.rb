@@ -1212,3 +1212,72 @@ describe('Source output field:', {:type => :feature}) do
     expect(response.code).to be 200
   end
 end
+
+# Search terms are matched as literal text (case-insensitive substring), never
+# as live regular expressions. Previously regex metacharacters leaked through:
+# "*" was an invalid pattern (500, #67) and "$" was a match-everything anchor
+# that returned the whole corpus (503, #68).
+describe('Search terms are literal, not regex (issues #67/#68):', {:type => :feature}) do
+
+  it('a bare * does not crash and is treated as a literal') do
+    response = TestHttp.get('/title/%2A')      # %2A = "*"
+    # no fixture title contains a literal "*", so this is a clean not-found,
+    # NOT a 500 / raw platform error
+    expect(response.body).to include('404')
+    expect(response.body).not_to include('Internal server error')
+    expect(response.code).to be 200
+  end
+
+  it('a bare $ is a literal, not an end-of-string match-everything anchor') do
+    response = TestHttp.get('/lines/%24')      # %24 = "$"
+    # as a literal, "$" matches no line; as a regex anchor it would have
+    # matched every poem in the corpus
+    expect(response.body).to include('404')
+    expect(response.code).to be 200
+  end
+
+  it('a normal substring search is unaffected by the escaping') do
+    response = TestHttp.get('/title/Moon')
+    expect(response.body).to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it('a literal round bracket still searches (regression guard for PR #44)') do
+    response = TestHttp.get('/lines/There%20it%20was%20)%20oh%20no')
+    expect(response.body).to include('There it was ) oh no')
+    expect(response.code).to be 200
+  end
+end
+
+# An unbounded search (no poemcount, no random) that matches more than
+# MAX_RESULTS poems returns a friendly, actionable message instead of a huge
+# payload that would stall the worker (503, issues #68/#69). The test
+# environment sets MAX_RESULTS=3 (docker-compose) so the 4-poem fixture can
+# exercise the cap; production uses the default (500).
+describe('Oversized result sets are capped (issues #68/#69):', {:type => :feature}) do
+
+  it('a search matching more than the cap returns a narrow-your-search message') do
+    response = TestHttp.get('/lines/e')        # "e" appears in all four fixture poems (> cap of 3)
+    expect(response.body).to include('413')
+    expect(response.body).to include('narrow your search')
+    expect(response.body).to include('poemcount')
+    # the giant result set is NOT serialised
+    expect(response.body).not_to include('The Moon Maiden\'s Song')
+    expect(response.code).to be 200
+  end
+
+  it('a search at or under the cap still returns poems normally') do
+    response = TestHttp.get('/author/Dickinson')   # matches 2 poems (<= cap)
+    expect(response.body).to include('Bereavement in their death to feel')
+    expect(response.body).to include('Said Death to Passion')
+    expect(response.body).not_to include('more than')
+    expect(response.code).to be 200
+  end
+
+  it('poemcount is an explicit opt-in that is not blocked by the cap') do
+    response = TestHttp.get('/lines,poemcount/e;2')  # broad term, but bounded to 2
+    expect(response.body).not_to include('413')
+    expect(response.parsed_response.length).to eq 2
+    expect(response.code).to be 200
+  end
+end

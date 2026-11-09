@@ -21,6 +21,9 @@ services:
       - MONGODB_URI=mongodb://mongo:27017/test
       - MONGODB_USER=test
       - MONGODB_PASS=test
+      # Low result cap so the tiny test fixture can exercise the MAX_RESULTS
+      # guard (issues #68/#69); production uses the default (500).
+      - MAX_RESULTS=3
     command: bash -c "ruby /poetrydb/tools/db_populate.rb /poetrydb/tools/test.json &&
                       ruby /poetrydb/tools/db_populate_authors.rb /poetrydb/tools/test_authors.json &&
                       bundle exec unicorn -p 3000 -c unicorn.rb"

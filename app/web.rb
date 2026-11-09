@@ -42,6 +42,17 @@ class Web < Sinatra::Base
       'localhost', '127.0.0.1',          # local development
       'poetrydb'                         # docker-compose service name (local test harness)
     ]
+
+    # Any unhandled exception returns a clean JSON body (see the error handler
+    # below) rather than the platform's raw error page (issues #67–#69).
+    set :show_exceptions, false
+    set :raise_errors, false
+  end
+
+  error do
+    content_type :json
+    status 500
+    { :status => 500, :reason => 'Internal server error' }.to_json
   end
 
   def json_status(code, reason)
