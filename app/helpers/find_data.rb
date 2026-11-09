@@ -24,18 +24,21 @@ class Web < Sinatra::Base
       random_axis = search_hash.delete('random_axis')
 
       @findings_data = find_random(randomcount, search_hash, output_fields, random_axis)
-    # otherwise return all matching documents, up to MAX_RESULTS. Fetch one more
-    # than the cap so we can tell "exactly at the cap" from "over the cap"
-    # without a separate count query; over the cap, signal the caller to return
-    # a friendly "narrow your search" message instead of a huge payload.
+    # otherwise return all matching documents, up to MAX_RESULTS. Check the
+    # match count CHEAPLY first (a capped server-side count that transfers no
+    # documents); only materialise the poems once we know the set is within the
+    # cap. Fetching even MAX_RESULTS+1 full poems just to count them is slow,
+    # because the `lines` arrays are large — a broad substring like /e/i matches
+    # almost the whole corpus and would time the worker out before any cap could
+    # apply. Over the cap, signal the caller to return a friendly message.
     else
-      results = settings.poetry_coll.find(
+      if settings.poetry_coll.count_documents(search_hash, :limit => MAX_RESULTS + 1) > MAX_RESULTS
+        return { 'over_limit' => MAX_RESULTS }
+      end
+
+      @findings_data = settings.poetry_coll.find(
         search_hash, { :projection => output_fields }
-      ).limit(MAX_RESULTS + 1).to_a
-
-      return { 'over_limit' => MAX_RESULTS } if results.length > MAX_RESULTS
-
-      @findings_data = results
+      ).to_a
     end
 
     @findings_data
